@@ -25,6 +25,9 @@ def solve(board):
                 return False
     return True
 
+def is_valid(board, row, col, num):
+    return not in_row(board, row, num) and not in_col(board, col, num) and not in_box(board, row, col, num)
+
 # Checks if a number is valid in a given row
 def in_row(board, row, num):
     for i in range(9):
