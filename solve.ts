@@ -47,6 +47,19 @@ let exampleQuestionBoardSolved: number[][] = [
     [3, 4, 5, 2, 8, 6, 1, 7, 9]
 ];
 
+enum Difficulty { 
+    Easy = getRandomInt(36, 49),
+    Medium = getRandomInt(32, 35),
+    Hard = getRandomInt(28, 31),
+    VeryHard = getRandomInt(24, 27)
+}
+
+// Returns a random integer between min and max
+function getRandomInt(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
 // Returns true if the incomplete board exactly a single solution
 function hasUnique(board: number[][]): boolean {
     if (isSolved(board)) return true;
@@ -197,3 +210,5 @@ function inBox(board: number[][], row: number, col: number, num: number): boolea
     }
     return false;
 }
+
+console.log(getRandomInt(1, 9));
