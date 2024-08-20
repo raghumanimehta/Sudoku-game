@@ -15,7 +15,7 @@ Sudoku generator and solver
         - else, go back to `STEP 2` and keep track of cell `C` in array `visited` without removing cell
 
 
-### STEP 1:
+### STEP A:
 1) start with empty board filled with 0's
 1) Do the following for all cells in order
     1) make an array with range[1,9]
@@ -26,11 +26,11 @@ Sudoku generator and solver
     1) the remaining array is `arr`
     1) randomly pick a number from `arr` for the cell
 
-### STEP 2:
+### STEP B:
 1) Pick two random numbers `i`, `j` in the range[1,9]
 1) mark this cell as empty (0)
 
-### STEP 3:
+### STEP C:
 1) Loop over all cells in order
     1) 
 
