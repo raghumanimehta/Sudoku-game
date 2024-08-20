@@ -21,14 +21,14 @@ Sudoku generator and solver
     1) randomly pick a number from `arr` for the cell
 
 ### STEP B:
-    1) `STEP 1` make an empty array `visited`
-    1) `STEP 2` Remove a random cell `C` that is not in `visited`
-    1) `STEP 3` Check if unique solution exists
-    1) `STEP 4`
-        - if unique exists:
-            - if target number of cells achieved, go to `STEP 5` after removing cell `C`
-            - Remove the cell `C` and loop back to `STEP 2`
-        - else, go back to `STEP 2` and keep track of cell `C` in array `visited` without removing cell
+1) `STEP 1` make an empty array `visited`
+1) `STEP 2` Remove a random cell `C` that is not in `visited`
+1) `STEP 3` Check if unique solution exists
+1) `STEP 4`
+    - if unique exists:
+        - if target number of cells achieved, go to `STEP 5` after removing cell `C`
+        - Remove the cell `C` and loop back to `STEP 2`
+    - else, go back to `STEP 2` and keep track of cell `C` in array `visited` without removing cell
 
 
 ## Dificulty params
