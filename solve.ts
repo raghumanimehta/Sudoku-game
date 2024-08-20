@@ -211,4 +211,56 @@ function inBox(board: number[][], row: number, col: number, num: number): boolea
     return false;
 }
 
+// make a completely filled board of 0s then change each cell to a number such that it remains solvable
+function getCompletelyFilledBoard(): number[][] {
+    let board: number[][] = [];
+    for (let row = 0; row < 9; row++) {
+        board[row] = [];
+        for (let col = 0; col < 9; col++) {
+            board[row][col] = 0;
+        }
+    }
+
+// let lastValidBoard: number[][] = [];
+// for (let row = 0; row < 9; row++) {
+//     lastValidBoard[row] = [];
+//     for (let col = 0; col < 9; col++) {
+//         lastValidBoard[row][col] = board[row][col];
+//     }
+// }
+// for (let row = 0; row < 9; row++) {
+//     for (let col = 0; col < 9; col++) {
+//         let array: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+//         array = filterArray(board, array, row, col);
+//         while (board[row][col] == 0) {
+//             let randomIndex = getRandomInt(0, array.length - 1);
+//             if (isValid(board, row, col, array[randomIndex])) {
+//                 if (solveBoard(board)) {
+//                     board[row][col] = array[randomIndex];
+//                     // lastValidBoard[row][col] = array[randomIndex];
+//                 } else {
+//                     board[row][col] = 0;
+//                     array = array.filter((elem) => elem !== array[randomIndex]);
+//                 }
+//             }
+//         }
+//     }
+// }
+    
+
+
+    return board;
+}
+
+// filter the array of numbers if the number is either in the row, column or box
+function filterArray(board: number[][], array: number[], row: number, col: number): number[] {
+    array = array.filter((elem) => {
+        if (inRow(board, row, col, elem) || inCol(board, row, col, elem) || inBox(board, row, col, elem)) {
+            return false;
+        }
+        return true;
+    });
+    return array;
+}
+
 console.log(getRandomInt(1, 9));
