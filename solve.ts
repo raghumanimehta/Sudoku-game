@@ -44,6 +44,28 @@ function solveBoard(board: number[][]): boolean {
     return true;
 }
 
+// function isUnique(board: number[][], count: number): boolean {
+//     // let count = 0;
+//     for (let row = 0; row < 9; row++) {
+//         for (let col = 0; col < 9; col++) {
+//             if (board[row][col] === 0) {
+//                 for (let num = 1; num <= 9; num++) {
+//                     if (isValid(board, row, col, num)) {
+//                         board[row][col] = num;
+//                         count++;
+//                         if (isUnique(board, count)) {
+//                             return true;
+//                         }
+//                         board[row][col] = 0;
+//                     }
+//                 }
+//                 return false;
+//             }
+//         }
+//     }
+//     return true;
+// }
+
 function isValid(board: number[][], row: number, col: number, num: number): boolean {
     return !inRow(board, row, num) && !inCol(board, col, num) && !inBox(board, row, col, num);
 }
@@ -82,4 +104,4 @@ function inBox(board: number[][], row: number, col: number, num: number): boolea
     return false;
 }
 solveBoard(board);
-console.log(board);
+console.log(board2);
