@@ -93,6 +93,51 @@ function isSolved(board: number[][]): boolean {
     return true;
 }
 
+
+
+function randomLocation(max: number) {
+    return Math.floor(Math.random() * max);
+}
+
+function hasACopy(i: number, j: number, array: number[][]): boolean {
+    let curr: number = 0;
+    let searchElem: number[] = [i,j];
+    for (let elem of array) {
+        if (elem === searchElem) {
+            return true;
+        }
+        curr++
+    }
+    return false 
+}
+
+function generateSudoku(board: number[][], cellsToRemove: number) {
+    let visited: number[][] = [];
+    for (let count = 0; count < cellsToRemove; count++) {
+        let i = -1;
+        let j = -1;
+        while (1) {
+            i = randomLocation(9);
+            j = randomLocation(9);
+            if (hasACopy(i, j, visited)) {
+                continue;
+            } else {
+                break;
+            }
+        }
+        let temp = board[i][j];
+        board[i][j] = 0;
+        visited.push([i,j]);
+        if (hasUnique(board)) {
+            continue;
+        } else {
+            board[i][j] = temp;
+            continue;
+        }
+    }
+}
+
+
 // Solves the board recursively using backtracking
 function solveBoard(board: number[][]): boolean {
     for (let row = 0; row < 9; row++) {
