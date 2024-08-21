@@ -47,12 +47,13 @@ let exampleQuestionBoardSolved: number[][] = [
     [3, 4, 5, 2, 8, 6, 1, 7, 9]
 ];
 
-enum Difficulty { 
-    Easy = getRandomInt(36, 49),
-    Medium = getRandomInt(32, 35),
-    Hard = getRandomInt(28, 31),
-    VeryHard = getRandomInt(24, 27)
-}
+// enum Difficulty { 
+//     Easy = getRandomInt(36, 49),
+//     Medium = getRandomInt(32, 35),
+//     Hard = getRandomInt(28, 31),
+//     VeryHard = getRandomInt(24, 27),
+//     Evil = 17
+// }
 
 // Returns a random integer between min and max
 function getRandomInt(min: number, max: number): number {
@@ -124,12 +125,43 @@ function hasACopy(i: number, j: number, array: number[][]): boolean {
     return false 
 }
 
-function generateSudoku(board: number[][], cellsToRemove: number) {
+/*enerate a sudoku puzzle for a given difficulty level. 
+  0: Easy
+  1: Medium
+  2: Hard
+  3: Very Hard
+  4: Evil
+  Default to Medium if the number apart from [0, 4] is passed
+*/
+function generateSudoku(diff: number): number[][] {
+    let board = getCompletelyFilledBoard();
+    let cellsToRemove: number;
+
+    switch (diff) {
+        case 0:
+            cellsToRemove = 81 - getRandomInt(36, 49);
+            break;
+        case 1:
+            cellsToRemove = 81 - getRandomInt(32, 35);
+            break;
+        case 2:
+            cellsToRemove = 81 - getRandomInt(28, 31);
+            break;
+        case 3:
+            cellsToRemove = 81 - getRandomInt(24, 27);
+            break;
+        case 4: 
+            cellsToRemove = 81 - 17;
+            break;
+        default: 
+            cellsToRemove = 81 - getRandomInt(32, 35);
+    }
+    
     let visited: number[][] = [];
     for (let count = 0; count < cellsToRemove; count++) {
         let i = -1;
         let j = -1;
-        while (1) {
+        while (true) {
             i = randomLocation(9);
             j = randomLocation(9);
             if (hasACopy(i, j, visited)) {
@@ -140,7 +172,7 @@ function generateSudoku(board: number[][], cellsToRemove: number) {
         }
         let temp = board[i][j];
         board[i][j] = 0;
-        visited.push([i,j]);
+        visited.push([i, j]);
         if (hasUnique(board)) {
             continue;
         } else {
@@ -148,6 +180,7 @@ function generateSudoku(board: number[][], cellsToRemove: number) {
             continue;
         }
     }
+    return board;
 }
 
 
@@ -211,47 +244,41 @@ function inBox(board: number[][], row: number, col: number, num: number): boolea
     return false;
 }
 
-// make a completely filled board of 0s then change each cell to a number such that it remains solvable
 function getCompletelyFilledBoard(): number[][] {
-    let board: number[][] = [];
-    for (let row = 0; row < 9; row++) {
-        board[row] = [];
-        for (let col = 0; col < 9; col++) {
-            board[row][col] = 0;
+    let board: number[][] = getBoardWithZeros();
+
+    function makeBoard(board: number[][]): boolean {
+        for (let row = 0; row < 9; row++) {
+            for (let col = 0; col < 9; col++) {
+                if (board[row][col] === 0) {
+                    let arr: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+                    arr = filterArray(board, arr, row, col);
+                    while (arr.length > 0) {
+                        let randomIndex: number = getRandomInt(0, arr.length - 1);
+                        board[row][col] = arr[randomIndex];
+                        let copyBoard: number[][] = deepCopy(board);
+                        if (solveBoard(copyBoard)) {
+                            if (makeBoard(board)) {
+                                return true;
+                            }
+                        }
+                        board[row][col] = 0;
+                        arr.splice(randomIndex, 1); 
+                    }
+                    return false; 
+                }
+            }
         }
+        return true;
     }
 
-// let lastValidBoard: number[][] = [];
-// for (let row = 0; row < 9; row++) {
-//     lastValidBoard[row] = [];
-//     for (let col = 0; col < 9; col++) {
-//         lastValidBoard[row][col] = board[row][col];
-//     }
-// }
-// for (let row = 0; row < 9; row++) {
-//     for (let col = 0; col < 9; col++) {
-//         let array: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-//         array = filterArray(board, array, row, col);
-//         while (board[row][col] == 0) {
-//             let randomIndex = getRandomInt(0, array.length - 1);
-//             if (isValid(board, row, col, array[randomIndex])) {
-//                 if (solveBoard(board)) {
-//                     board[row][col] = array[randomIndex];
-//                     // lastValidBoard[row][col] = array[randomIndex];
-//                 } else {
-//                     board[row][col] = 0;
-//                     array = array.filter((elem) => elem !== array[randomIndex]);
-//                 }
-//             }
-//         }
-//     }
-// }
-    
-
-
+    makeBoard(board);
     return board;
 }
 
+// Example usage
+let newBoard: number[][] = getCompletelyFilledBoard();
+console.log(newBoard);
 // filter the array of numbers if the number is either in the row, column or box
 function filterArray(board: number[][], array: number[], row: number, col: number): number[] {
     array = array.filter((elem) => {
@@ -263,4 +290,18 @@ function filterArray(board: number[][], array: number[], row: number, col: numbe
     return array;
 }
 
-console.log(getRandomInt(1, 9));
+function getBoardWithZeros(): number[][] {
+    let board: number[][] = []; 
+    for (let row = 0; row < 9; row++) {
+        board[row] = [];
+        for (let col = 0; col < 9; col++) {
+            board[row][col] = 0;
+        }
+    }
+    return board;
+}
+
+function deepCopy<T>(array: T): T {
+    return JSON.parse(JSON.stringify(array));
+}
+
