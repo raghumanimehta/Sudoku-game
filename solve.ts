@@ -47,13 +47,6 @@ let exampleQuestionBoardSolved: number[][] = [
     [3, 4, 5, 2, 8, 6, 1, 7, 9]
 ];
 
-// enum Difficulty { 
-//     Easy = getRandomInt(36, 49),
-//     Medium = getRandomInt(32, 35),
-//     Hard = getRandomInt(28, 31),
-//     VeryHard = getRandomInt(24, 27),
-//     Evil = 17
-// }
 
 // Returns a random integer between min and max
 function getRandomInt(min: number, max: number): number {
@@ -108,22 +101,45 @@ function isSolved(board: number[][]): boolean {
 }
 
 
-
-function randomLocation(max: number) {
-    return Math.floor(Math.random() * max);
-}
-
 function hasACopy(i: number, j: number, array: number[][]): boolean {
-    let curr: number = 0;
-    let searchElem: number[] = [i,j];
+    // let curr: number = 0;
+    // let searchElem: number[] = [i,j];
     for (let elem of array) {
-        if (elem === searchElem) {
+        if ((elem[0] === i) && (elem[1] === j)) {
             return true;
         }
-        curr++
+        // curr++
     }
     return false 
 }
+
+
+
+
+// function getDifficulty(diff: number): number {
+//     let cellsToRemove: number;
+//     switch (diff) {
+//         case 0:
+//             cellsToRemove = 81 - getRandomInt(36, 49);
+//             break;
+//         case 1:
+//             cellsToRemove = 81 - getRandomInt(32, 35);
+//             break;
+//         case 2:
+//             cellsToRemove = 81 - getRandomInt(28, 31);
+//             break;
+//         case 3:
+//             cellsToRemove = 81 - getRandomInt(24, 27);
+//             break;
+//         case 4: 
+//             cellsToRemove = 81 - 17;
+//             break;
+//         default: 
+//             cellsToRemove = 81 - getRandomInt(32, 35);
+//     }
+//     return cellsToRemove;
+// }
+
 
 /*enerate a sudoku puzzle for a given difficulty level. 
   0: Easy
@@ -133,7 +149,7 @@ function hasACopy(i: number, j: number, array: number[][]): boolean {
   4: Evil
   Default to Medium if the number apart from [0, 4] is passed
 */
-function generateSudoku(diff: number): number[][] {
+function generateSudoku(diff: number) {
     let board = getCompletelyFilledBoard();
     let cellsToRemove: number;
 
@@ -156,28 +172,26 @@ function generateSudoku(diff: number): number[][] {
         default: 
             cellsToRemove = 81 - getRandomInt(32, 35);
     }
-    
+    console.log(cellsToRemove);
     let visited: number[][] = [];
     for (let count = 0; count < cellsToRemove; count++) {
         let i = -1;
         let j = -1;
         while (true) {
-            i = randomLocation(9);
-            j = randomLocation(9);
+            i = getRandomInt(0,8);
+            j = getRandomInt(0,8);
             if (hasACopy(i, j, visited)) {
                 continue;
             } else {
                 break;
             }
         }
-        let temp = board[i][j];
-        board[i][j] = 0;
+        let tempBoard = deepCopy(board);
+        let temp = tempBoard[i][j];
+        tempBoard[i][j] = 0;
         visited.push([i, j]);
-        if (hasUnique(board)) {
-            continue;
-        } else {
-            board[i][j] = temp;
-            continue;
+        if (hasUnique(tempBoard)) {
+            board[i][j] = 0;
         }
     }
     return board;
