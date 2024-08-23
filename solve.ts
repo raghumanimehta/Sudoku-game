@@ -319,3 +319,38 @@ function deepCopy<T>(array: T): T {
     return JSON.parse(JSON.stringify(array));
 }
 
+
+//////////////////////////////////////////////////////////
+
+// const sudokuBoard = document.getElementById('sudokuBoard');
+
+// const sudokuBoard = document.getElementById('sudokuBoard') as HTMLElement | null;
+
+// document.addEventListener('DOMContentLoaded', function() {
+//     const board = generateSudoku(1);
+//     if (sudokuBoard) {
+//         displayBoard(board, sudokuBoard);
+//     } else {
+//         console.error('sudokuBoard element not found');
+//     }
+// });
+
+// function displayBoard(board: number[][], sudokuBoard: HTMLElement) {
+//     sudokuBoard.innerHTML = '';
+//     for (let i = 0; i < 9; i++) {
+//         let rowDiv = document.createElement('div');
+//         rowDiv.style.display = 'flex';
+//         for (let j = 0; j < 9; j++) {
+//             let cellDiv = document.createElement('div');
+//             cellDiv.textContent = board[i][j] === 0 ? '' : board[i][j].toString();
+//             cellDiv.style.width = '40px';
+//             cellDiv.style.height = '40px';
+//             cellDiv.style.border = '1px solid black';
+//             cellDiv.style.display = 'flex';
+//             cellDiv.style.justifyContent = 'center';
+//             cellDiv.style.alignItems = 'center';
+//             rowDiv.appendChild(cellDiv);
+//         }
+//         sudokuBoard.appendChild(rowDiv);
+//     }
+// }
