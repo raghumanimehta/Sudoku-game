@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Sudoku Game</title>
-    <link rel="stylesheet" type="text/css" href="play_style.css">
+    <link rel="stylesheet" type="text/css" href="index_style.css">
 </head>
 <body>
     <div class="container">
@@ -10,6 +10,10 @@
         <button id="playButton">Play</button>
     </div>
     
-    <script src="script.js"></script>
+    <script>
+        document.getElementById('playButton').addEventListener('click', function() {
+            window.location.href = 'play.html';
+        });
+    </script>
 </body>
 </html>
