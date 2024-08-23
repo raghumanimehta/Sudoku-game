@@ -115,44 +115,16 @@ function hasACopy(i: number, j: number, array: number[][]): boolean {
 
 
 
-
-// function getDifficulty(diff: number): number {
-//     let cellsToRemove: number;
-//     switch (diff) {
-//         case 0:
-//             cellsToRemove = 81 - getRandomInt(36, 49);
-//             break;
-//         case 1:
-//             cellsToRemove = 81 - getRandomInt(32, 35);
-//             break;
-//         case 2:
-//             cellsToRemove = 81 - getRandomInt(28, 31);
-//             break;
-//         case 3:
-//             cellsToRemove = 81 - getRandomInt(24, 27);
-//             break;
-//         case 4: 
-//             cellsToRemove = 81 - 17;
-//             break;
-//         default: 
-//             cellsToRemove = 81 - getRandomInt(32, 35);
-//     }
-//     return cellsToRemove;
-// }
-
-
-/*enerate a sudoku puzzle for a given difficulty level. 
-  0: Easy
+/* gets difficulty of the game
+0: Easy
   1: Medium
   2: Hard
   3: Very Hard
   4: Evil
-  Default to Medium if the number apart from [0, 4] is passed
+    Default to Medium if the number apart from [0, 4] is passed
 */
-function generateSudoku(diff: number) {
-    let board = getCompletelyFilledBoard();
+function getDifficulty(diff: number): number {
     let cellsToRemove: number;
-
     switch (diff) {
         case 0:
             cellsToRemove = 81 - getRandomInt(36, 49);
@@ -172,6 +144,20 @@ function generateSudoku(diff: number) {
         default: 
             cellsToRemove = 81 - getRandomInt(32, 35);
     }
+    return cellsToRemove;
+}
+
+/*enerate a sudoku puzzle for a given difficulty level. 
+  0: Easy
+  1: Medium
+  2: Hard
+  3: Very Hard
+  4: Evil
+  Default to Medium if the number apart from [0, 4] is passed
+*/
+function generateSudoku(diff: number) {
+    let board = getCompletelyFilledBoard();
+    let cellsToRemove: number = getDifficulty(diff);
     console.log(cellsToRemove);
     let visited: number[][] = [];
     for (let count = 0; count < cellsToRemove; count++) {
