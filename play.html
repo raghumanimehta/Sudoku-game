@@ -8,7 +8,7 @@
 <script src="solve.js"></script>
 <link rel="stylesheet" href="style.css">
 <body>
-    <div id="container">
+    <!-- <div id="container">
         <div class="box" id="box-0">
             <div data-has-note="1" class="cell" id="cell-0-0">
                 input
@@ -41,6 +41,18 @@
         <div class="box" id="box-6"></div>
         <div class="box" id="box-7"></div>
         <div class="box" id="box-8"></div>
+    </div> -->
+    <div class="board">
+        <script> 
+            for (let row = 0; row < 9; row++) {
+                for (let col = 0; col < 9; col++) {
+                    let cell = document.createElement('div');
+                    cell.id = `cell-${row}-${col}`;
+                    cell.classList.add('cells');
+                    cell.textContent = 'x';
+                }
+            }
+        </script>
     </div>
 </body>
 </html>
