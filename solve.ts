@@ -310,18 +310,21 @@ function deepCopy<T>(array: T): T {
 ////////////////////////// DISPLAYING THE PAGE //////////////////////////
 
 document.addEventListener('DOMContentLoaded', function() {
-    const difficulty = parseInt(localStorage.getItem('dificulty') || '1');
-    displayBoardInDefaultMode(difficulty) 
+    // 
+    const difficulty = 1;// difficulty not working !!!
+    displayDifficulty(difficulty);
+    displayBoardInDefaultMode(difficulty);
+    
 });
 
 function displayBoardInDefaultMode(difficulty: number) {
     let board: number[][] = generateSudoku(difficulty);
-    const container = document.createElement('div');
-    container.id = 'container';
-    document.body.appendChild(container);
+   
+    const container = document.getElementById('container');
     if (container) {
-        container.innerHTML = ''; // Clear any existing content
+        container.innerHTML = '';
     }
+    
     for (let row: number = 0; row < 9; row++) {
         for (let col: number = 0; col < 9; col++) {
             let cell;
@@ -334,7 +337,16 @@ function displayBoardInDefaultMode(difficulty: number) {
             }
             cell.className = 'cell';
             cell.id = `cell-${row}-${col}`;
-            container.appendChild(cell);
+            if (container) {
+                container.appendChild(cell);
+            }
         }
+    }
+}
+
+function displayDifficulty(difficulty: number) {
+    const difficultyElement = document.getElementById('difficulty');
+    if (difficultyElement) {
+        difficultyElement.innerText = `Difficulty: ${difficulty}`;
     }
 }
