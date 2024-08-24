@@ -310,7 +310,8 @@ function deepCopy<T>(array: T): T {
 ////////////////////////// DISPLAYING THE PAGE //////////////////////////
 
 document.addEventListener('DOMContentLoaded', function() {
-    displayBoardInDefaultMode(1); // !!! change this later
+    const difficulty = parseInt(localStorage.getItem('dificulty') || '1');
+    displayBoardInDefaultMode(difficulty) 
 });
 
 function displayBoardInDefaultMode(difficulty: number) {
