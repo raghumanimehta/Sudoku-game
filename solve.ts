@@ -290,6 +290,7 @@ function filterArray(board: number[][], array: number[], row: number, col: numbe
     return array;
 }
 
+// Returns a 9x9 board with all zeros
 function getBoardWithZeros(): number[][] {
     let board: number[][] = []; 
     for (let row = 0; row < 9; row++) {
@@ -301,6 +302,38 @@ function getBoardWithZeros(): number[][] {
     return board;
 }
 
+// make a deep copy of the array
 function deepCopy<T>(array: T): T {
     return JSON.parse(JSON.stringify(array));
+}
+
+////////////////////////// DISPLAYING THE PAGE //////////////////////////
+
+document.addEventListener('DOMContentLoaded', function() {
+    displayBoardInDefaultMode(1); // !!! change this later
+});
+
+function displayBoardInDefaultMode(difficulty: number) {
+    let board: number[][] = generateSudoku(difficulty);
+    const container = document.createElement('div');
+    container.id = 'container';
+    document.body.appendChild(container);
+    if (container) {
+        container.innerHTML = ''; // Clear any existing content
+    }
+    for (let row: number = 0; row < 9; row++) {
+        for (let col: number = 0; col < 9; col++) {
+            let cell;
+            if (board[row][col] === 0) {
+                cell = document.createElement('input') as HTMLInputElement;
+                cell.type = 'text';
+            } else {
+                cell = document.createElement('div') as HTMLDivElement;
+                cell.innerText = board[row][col].toString();
+            }
+            cell.className = 'cell';
+            cell.id = `cell-${row}-${col}`;
+            container.appendChild(cell);
+        }
+    }
 }
