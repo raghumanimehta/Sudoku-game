@@ -19,13 +19,16 @@
     </div>
     
     <script>
+        
+        document.getElementById('difficulty').addEventListener('change', function() {
+            localStorage.setItem('dif', document.getElementById('difficulty').value);
+        });
+
+
         document.getElementById('playButton').addEventListener('click', function() {
             window.location.href = 'play.html';
         });
 
-        document.getElementById('difficulty').addEventListener('change', function() {
-            localStorage.setItem('difficulty', document.getElementById('difficulty').value);
-        });
     </script>
 </body>
 </html>
