@@ -195,6 +195,10 @@ function displayBoard(board: number[][]) {
     }
 }
 
+// toggles the note mode for sudoku on click
 function setTogleNoteModeButton() {
-    throw new Error("Function not implemented.");
+    const toggleNoteButton = document.getElementById('noteButton');
+    toggleNoteButton?.addEventListener('click', function() {
+        alert("Function not implemented.");
+    });
 }
