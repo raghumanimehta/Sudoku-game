@@ -28,7 +28,7 @@ body {
 /* Thicker border for specific cells */
 /* Top border */
 
-#cell-0-0, #cell-0-1, #cell-0-2, #cell-0-3, #cell-0-4, #cell-0-5, #cell-0-6, #cell-0-7, #cell-0-8 {
+/* #cell-0-0, #cell-0-1, #cell-0-2, #cell-0-3, #cell-0-4, #cell-0-5, #cell-0-6, #cell-0-7, #cell-0-8 {
     border-top-width: 5px;
 }
 
@@ -58,7 +58,7 @@ body {
 
 #cell-5-0, #cell-5-1, #cell-5-2, #cell-5-3, #cell-5-4, #cell-5-5, #cell-5-6, #cell-5-7, #cell-5-8 {
     border-bottom-width: 5px;
-}
+} */
 
 
 .cell {
@@ -73,11 +73,21 @@ body {
     align-items: center;
     justify-content: center;
     text-align: center;
-    box-sizing: border-box; 
+    box-sizing: border-box;
+    color: rgb(55, 89, 192); 
+    font-weight: bold;
 }
 
-.cell:hover {
+.cell:disabled {
+    /* background-color: #ccc; */
+    color: black;
+    font-weight: normal;
+}
+
+.cell:hover,
+.cell:focus {
     background-color: #f0f0f0;
+    outline: none;
 }
 
 #numberButtonsContainer {

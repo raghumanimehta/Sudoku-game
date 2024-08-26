@@ -35,16 +35,17 @@ function displayBoardInDefaultMode(difficulty: number) {
     
     for (let row: number = 0; row < 9; row++) {
         for (let col: number = 0; col < 9; col++) {
-            let cell: HTMLElement;
+            let cell: HTMLInputElement;
             if (board[row][col] === 0) {
                 cell = document.createElement('input');
-                (cell as HTMLInputElement).type = 'number';
-                (cell as HTMLInputElement).maxLength = 1;
-                (cell as HTMLInputElement).min = '1';
-                (cell as HTMLInputElement).max = '9';
+                // cell.type = '';
+                cell.maxLength = 1;
+                // cell.min = '1';
+                // cell.max = '9';
             } else {
-                cell = document.createElement('div');
-                cell.innerText = board[row][col].toString();
+                cell = document.createElement('input');
+                cell.value = board[row][col].toString();
+                cell.disabled = true;
             }
             cell.className = 'cell';
             cell.id = `cell-${row}-${col}`;
