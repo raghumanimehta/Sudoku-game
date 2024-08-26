@@ -131,20 +131,22 @@ export function duplicateBoard(board: number[][]): number[][] {
 function hasUnique(board: number[][]): boolean {
     if (isSolved(board)) return true;
 
-    // returns the number of solutions
     function hasUniqueHelper(board: number[][]): number {
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
                 if (board[row][col] === 0) { // Check if empty cell exists
                     let numberOfSolutions = 0;
                     for (let num = 1; num <= 9; num++) { // then fill
-                        if (isValid(board, row, col, num)) { // ignore
+                        if (isValid(board, row, col, num)) { // Check if placing num is valid
                             board[row][col] = num;
-                            if (isSolved(board)) { // returns true if board is solved
+                            if (isSolved(board)) { 
                                 numberOfSolutions++;
                             } else {
                                 numberOfSolutions += hasUniqueHelper(board);
-                                board[row][col] = 0; // some cells are empty
+                            }
+                            board[row][col] = 0; 
+                            if (numberOfSolutions > 1) {
+                                return numberOfSolutions; 
                             }
                         }
                     }
@@ -152,8 +154,9 @@ function hasUnique(board: number[][]): boolean {
                 }
             }
         }
-        return -1;
+        return 1;
     }
+    
 
     return hasUniqueHelper(board) == 1;
 }
@@ -186,7 +189,6 @@ export function isSolved(board: number[][]): boolean {
 export function generateSudoku(diff: number) {
     let board = getCompletelyFilledBoard();
     let cellsToRemove: number = getDifficulty(diff);
-    console.log(cellsToRemove);
     let visited: number[][] = [];
     for (let count = 0; count < cellsToRemove; count++) {
         let i = -1;
@@ -194,10 +196,8 @@ export function generateSudoku(diff: number) {
         while (true) {
             i = getRandomInt(0,8);
             j = getRandomInt(0,8);
-            if (hasACopy(i, j, visited)) {
-                continue;
-            } else {
-                break;
+            if (!hasACopy(i, j, visited)) {
+                 break;
             }
         }
         let tempBoard = deepCopy(board);
