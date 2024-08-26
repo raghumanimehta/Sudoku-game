@@ -1,6 +1,7 @@
 import {
     duplicateBoard,
     generateSudoku,
+    getBoardWithZeros,
     isSolved,
     solveBoard
 } from "./solve.js";
@@ -23,6 +24,8 @@ document.addEventListener('DOMContentLoaded', function() {
 function displayBoardInDefaultMode(difficulty: number) {
     let board: number[][] = generateSudoku(difficulty);
     currentBoard = board;
+    
+    // FEATURE: Uncommet below if hints enabled
     solvedBoard = duplicateBoard(board);
     solveBoard(solvedBoard);
    
@@ -121,12 +124,26 @@ function setDeleteButton() {
 function setCheckButton() {
     const checkButton = document.getElementById('checkButton');
     checkButton?.addEventListener('click', function() {
-        if (isSolved(currentBoard)) {
+        if (isSolved(getCurrentBoardState())) {
             alert('Congratulations! You have solved the puzzle!');
         } else {
             alert('The puzzle is either not solved yet or you have submitted a wrong solution!');
         }
     });
+}
+
+function getCurrentBoardState(): number[][] {
+    const cells = document.querySelectorAll('div.cell');
+    const out = getBoardWithZeros();
+
+    for (let row = 0; row < out.length; row++) {
+        for (let col = 0; col < out[row].length; col++) {
+            const cell = cells[row*9+col];
+            out[row][col] = parseInt(cell.innerHTML);        
+        }
+    }
+    console.log(out);
+    return out;
 }
 
 // TODO

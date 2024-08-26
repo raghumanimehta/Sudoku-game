@@ -98,7 +98,7 @@ function filterArray(board: number[][], array: number[], row: number, col: numbe
 }
 
 // Returns a 9x9 board with all zeros
-function getBoardWithZeros(): number[][] {
+export function getBoardWithZeros(): number[][] {
     let board: number[][] = []; 
     for (let row = 0; row < 9; row++) {
         board[row] = [];
