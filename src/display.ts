@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setClearButton();
     setSolveButton();
     setCheckButton();
+    setTogleNoteModeButton();
 
     setNumberButtons();
     setDeleteButton();
@@ -192,4 +193,8 @@ function displayBoard(board: number[][]) {
             }
         }
     }
+}
+
+function setTogleNoteModeButton() {
+    throw new Error("Function not implemented.");
 }
