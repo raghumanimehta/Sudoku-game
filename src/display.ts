@@ -6,7 +6,7 @@ import {
 } from "./solve.js";
 
 let solvedBoard: number[][]; // The solved board
-let lastFocusedInput: HTMLInputElement | null = null; // The last focused input
+let selectedCell: HTMLDivElement | null = null; // The last focused input
 let currentBoard: number[][]; // The current board
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -14,8 +14,6 @@ document.addEventListener('DOMContentLoaded', function() {
     displayDifficulty(difficulty);
     displayBoardInDefaultMode(difficulty);
     setNumberButtons();
-    attachFocusListeners();
-    disableKeyboardInputs();
     setDeleteButton();
     setCheckButton();
     setSolveButton();
@@ -35,17 +33,20 @@ function displayBoardInDefaultMode(difficulty: number) {
     
     for (let row: number = 0; row < 9; row++) {
         for (let col: number = 0; col < 9; col++) {
-            let cell: HTMLInputElement;
+            let cell: HTMLDivElement;
             if (board[row][col] === 0) {
-                cell = document.createElement('input');
-                // cell.type = '';
-                cell.maxLength = 1;
-                // cell.min = '1';
-                // cell.max = '9';
+                cell = document.createElement('div');
+                cell.dataset.disabled = '0';
+                cell.dataset.isSelected = '0';
+                cell.addEventListener('click',()=>{
+                    resetIsSelected()
+                    cell.dataset.isSelected = '1';
+                    selectedCell = cell;
+                })
             } else {
-                cell = document.createElement('input');
-                cell.value = board[row][col].toString();
-                cell.disabled = true;
+                cell = document.createElement('div');
+                cell.innerHTML = board[row][col].toString();
+                cell.dataset.disabled = '1';
             }
             cell.className = 'cell';
             cell.id = `cell-${row}-${col}`;
@@ -54,6 +55,15 @@ function displayBoardInDefaultMode(difficulty: number) {
             }
         }
     }
+}
+
+// Resets the is selected data attribtue for all cells
+function resetIsSelected() {
+    const cells = document.querySelectorAll('div.cell');
+
+    cells.forEach(cell => {
+        (cell as HTMLDivElement).dataset.isSelected = '0';
+    });
 }
 
 // Displays the difficulty level
@@ -88,49 +98,21 @@ function setNumberButtons(): void {
     
     for (let i = 0; i < numberButtons.length; i++) {
         numberButtons[i].addEventListener('click', function() {
-            if (lastFocusedInput) {
-                lastFocusedInput.value = numberButtons[i].textContent || '';
+            if (selectedCell) {
+                selectedCell.innerHTML = numberButtons[i].textContent || '';
             }
         });
     }
 }
 
-// Attach focus listeners to all inputs to track the last focused one
-function attachFocusListeners() {
-    const inputs = document.querySelectorAll('input.cell');
-    inputs.forEach(input => {
-        input.addEventListener('focus', function() {
-            lastFocusedInput = input as HTMLInputElement;
-        });
-    });
-}
-
-// Get the selected cell
-function getSelectedCell(): HTMLElement | null {
-    return lastFocusedInput;
-}
-
-// Disable keyboard inputs for all keys except up and down arrows
-function disableKeyboardInputs() {
-    document.addEventListener('keydown', function(event) {
-        if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') {
-            event.preventDefault();
-        }
-    });
-    document.addEventListener('keypress', function(event) {
-        if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') {
-            event.preventDefault();
-        }
-    });
-}
-
 // add event listener the delete button
 function setDeleteButton() {
-    const deleteButton = document.getElementById('delete');
+    const deleteButton = document.querySelector('#delete');
     deleteButton?.addEventListener('click', function() {
-        const cell = getSelectedCell();
-        if (cell) {
-            (cell as HTMLInputElement).value = '';
+        if (selectedCell) {
+            selectedCell.innerHTML = '';
+            selectedCell = null;
+            resetIsSelected();
         }
     });
 }

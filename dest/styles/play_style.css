@@ -78,15 +78,21 @@ body {
     font-weight: bold;
 }
 
-.cell:disabled {
+.cell[data-disabled='1'] {
     /* background-color: #ccc; */
     color: black;
     font-weight: normal;
 }
 
+.cell[data-is-selected='1'] {
+    color: orange;
+    background-color: #ddd;
+    font-weight: normal;
+}
+
 .cell:hover,
 .cell:focus {
-    background-color: #f0f0f0;
+    background-color: #ddd;
     outline: none;
 }
 
