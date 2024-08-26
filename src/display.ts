@@ -6,9 +6,8 @@ import {
     solveBoard
 } from "./solve.js";
 
-let solvedBoard: number[][]; // The solved board
 let selectedCell: HTMLDivElement | null = null; // The last focused input
-let currentBoard: number[][]; // The current board
+let initialBoard: number[][]; // The initial board state
 
 document.addEventListener('DOMContentLoaded', function() {
     const difficulty = parseInt(localStorage.getItem('dif') || '0');
@@ -23,12 +22,8 @@ document.addEventListener('DOMContentLoaded', function() {
 // Display the board in the default mode
 function displayBoardInDefaultMode(difficulty: number) {
     let board: number[][] = generateSudoku(difficulty);
-    currentBoard = board;
+    initialBoard = board;
     
-    // FEATURE: Uncommet below if hints enabled
-    solvedBoard = duplicateBoard(board);
-    solveBoard(solvedBoard);
-   
     const container = document.getElementById('container');
     if (container) {
         container.innerHTML = '';
@@ -120,7 +115,7 @@ function setDeleteButton() {
     });
 }
 
-// add event listener to the check button. It checks if the puzzle is solved or not.
+// checks if the puzzle is solved or not on click
 function setCheckButton() {
     const checkButton = document.getElementById('checkButton');
     checkButton?.addEventListener('click', function() {
@@ -139,26 +134,39 @@ function getCurrentBoardState(): number[][] {
     for (let row = 0; row < out.length; row++) {
         for (let col = 0; col < out[row].length; col++) {
             const cell = cells[row*9+col];
-            out[row][col] = parseInt(cell.innerHTML);        
+            let cellValue = parseInt(cell.innerHTML);
+            if (Number.isNaN(cellValue)) {
+                out[row][col] = 0;
+            } else {
+                out[row][col] = cellValue;
+            }
         }
     }
     console.log(out);
     return out;
 }
 
-// TODO
+// solves the board on click
 function setSolveButton() {
     const solveButton = document.getElementById('solveButton');
     solveButton?.addEventListener('click', function() {
-        if (isSolved(currentBoard)) {
-            alert('The puzzle is already solved!');
+        if (isSolved(getCurrentBoardState())) {
+            alert('The puzzle is solved!');
         } else {
-            displayBoard(solvedBoard);
+            const tempBoard = duplicateBoard(getCurrentBoardState());
+            const isSolvable = solveBoard(tempBoard);
+            if (isSolvable) {
+                displayBoard(tempBoard);
+            } else {
+                // This error should never occur if generating 
+                //    and solving algorithm are correctly implemented
+                alert('This puzzle is not solvable :(, (UNEXPECTED ERROR)');
+            }
         }
     });
 }
 
-// TODO
+// Overwrites the HTMLDom board with given board
 function displayBoard(board: number[][]) {
     for (let row: number = 0; row < 9; row++) {
         for (let col: number = 0; col < 9; col++) {
