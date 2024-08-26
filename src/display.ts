@@ -8,19 +8,23 @@ import {
 
 let selectedCell: HTMLDivElement | null = null; // The last focused input
 let initialBoard: number[][]; // The initial board state
+let difficulty: number;
 
 document.addEventListener('DOMContentLoaded', function() {
-    const difficulty = parseInt(localStorage.getItem('dif') || '0');
-    displayDifficulty(difficulty);
-    displayBoardInDefaultMode(difficulty);
+    difficulty = parseInt(localStorage.getItem('dif') || '0');
+    displayDifficulty();
+    initializeBoard();
+    
+    setClearButton();
+    setSolveButton();
+    setCheckButton();
+
     setNumberButtons();
     setDeleteButton();
-    setCheckButton();
-    setSolveButton();
 });
 
 // Display the board in the default mode
-function displayBoardInDefaultMode(difficulty: number) {
+function initializeBoard() {
     let board: number[][] = generateSudoku(difficulty);
     initialBoard = board;
     
@@ -65,7 +69,7 @@ function resetIsSelected() {
 }
 
 // Displays the difficulty level
-function displayDifficulty(difficulty: number) {
+function displayDifficulty() {
     const difficultyElement = document.getElementById('difficulty');
     if (difficultyElement) {
         switch (difficulty) {
@@ -127,6 +131,14 @@ function setCheckButton() {
     });
 }
 
+// updates the board to original state
+function setClearButton() {
+    const checkButton = document.getElementById('clearButton');
+    checkButton?.addEventListener('click', function() {
+        displayBoard(initialBoard);
+    });
+}
+
 function getCurrentBoardState(): number[][] {
     const cells = document.querySelectorAll('div.cell');
     const out = getBoardWithZeros();
@@ -172,7 +184,11 @@ function displayBoard(board: number[][]) {
         for (let col: number = 0; col < 9; col++) {
             const cell = document.getElementById(`cell-${row}-${col}`);
             if (cell) {
-                (cell as HTMLDivElement).innerText = board[row][col].toString();
+                let value = '';
+                if (board[row][col] != 0) {
+                    value = board[row][col].toString();
+                }
+                (cell as HTMLDivElement).innerText = value;
             }
         }
     }
