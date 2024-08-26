@@ -49,6 +49,11 @@ body {
 .cell[data-disabled='1'] {
     color: black;
     font-weight: normal;
+    background-color: #fefefe;
+}
+
+.cell[data-is-highlighted='1'] {
+    background-color: rgb(146, 164, 146);
 }
 
 .cell[data-is-selected='1'] {

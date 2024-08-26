@@ -6,9 +6,49 @@ import {
     solveBoard
 } from "./solve.js";
 
-let selectedCell: HTMLDivElement | null = null; // The last focused input
+// Class that interacts with the selected cell
+class SelectedCell {
+    private currentCell: HTMLDivElement | null = null;
+    
+    SelectedCell() {
+        this.resetIsSelected();
+    }
+
+    setCell(newCell: HTMLDivElement) {
+        this.resetIsSelected();
+        this.currentCell = newCell;
+        this.currentCell.dataset.isSelected = '1'
+        // Set row-col highlighting
+        for (let row = 0; row < 9; row++) {
+            const cell = document.getElementById(`cell-${row}-${newCell.dataset.column}`);
+            if (cell === null) return;
+            cell.dataset.isHighlighted = '1';
+        }
+        for (let col = 0; col < 9; col++) {
+            const cell = document.getElementById(`cell-${newCell.dataset.row}-${col}`);
+            if (cell === null) return;
+            cell.dataset.isHighlighted = '1';
+        }
+    }
+
+    setValue(value: string) {
+        if (this.currentCell === null) return;
+        this.currentCell.innerHTML = value;
+    }
+
+    private resetIsSelected() {
+        const cells = document.querySelectorAll('div.cell');
+
+        cells.forEach(cell => {
+            (cell as HTMLDivElement).dataset.isSelected = '0';
+            (cell as HTMLDivElement).dataset.isHighlighted = '0';
+        });
+    }
+}
+
 let initialBoard: number[][]; // The initial board state
 let difficulty: number;
+let selectedCell: SelectedCell;
 
 document.addEventListener('DOMContentLoaded', function() {
     difficulty = parseInt(localStorage.getItem('dif') || '0');
@@ -47,17 +87,16 @@ function initializeBoard() {
                 if (board[row][col] === 0) {
                     cell = document.createElement('div');
                     cell.dataset.disabled = '0';
-                    cell.dataset.isSelected = '0';
                     cell.addEventListener('click',()=>{
-                        resetIsSelected()
-                        cell.dataset.isSelected = '1';
-                        selectedCell = cell;
+                        selectedCell.setCell(cell);
                     })
                 } else {
                     cell = document.createElement('div');
                     cell.innerHTML = board[row][col].toString();
                     cell.dataset.disabled = '1';
                 }
+                cell.dataset.column = col.toString();
+                cell.dataset.row = row.toString();
                 cell.className = 'cell';
                 cell.id = `cell-${row}-${col}`;
                 boxElement.appendChild(cell);
@@ -66,15 +105,8 @@ function initializeBoard() {
 
         container.appendChild(boxElement);
     }
-}
 
-// Resets the 'data-is-selected' data attribtue for all cells
-function resetIsSelected() {
-    const cells = document.querySelectorAll('div.cell');
-
-    cells.forEach(cell => {
-        (cell as HTMLDivElement).dataset.isSelected = '0';
-    });
+    selectedCell = new SelectedCell();
 }
 
 // Displays the difficulty level
@@ -110,7 +142,7 @@ function setNumberButtons(): void {
     for (let i = 0; i < numberButtons.length; i++) {
         numberButtons[i].addEventListener('click', function() {
             if (selectedCell) {
-                selectedCell.innerHTML = numberButtons[i].textContent || '';
+                selectedCell.setValue(numberButtons[i].textContent || '');
             }
         });
     }
@@ -120,11 +152,7 @@ function setNumberButtons(): void {
 function setDeleteButton() {
     const deleteButton = document.querySelector('#delete');
     deleteButton?.addEventListener('click', function() {
-        if (selectedCell) {
-            selectedCell.innerHTML = '';
-            selectedCell = null;
-            resetIsSelected();
-        }
+        selectedCell.setValue('');
     });
 }
 
