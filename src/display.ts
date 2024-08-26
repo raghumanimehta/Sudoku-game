@@ -29,38 +29,46 @@ function initializeBoard() {
     let board: number[][] = generateSudoku(difficulty);
     initialBoard = board;
     
-    const container = document.getElementById('container');
-    if (container) {
-        container.innerHTML = '';
+    const container = document.querySelector('#container');
+    if (!container) {
+        return;
     }
     
-    for (let row: number = 0; row < 9; row++) {
-        for (let col: number = 0; col < 9; col++) {
-            let cell: HTMLDivElement;
-            if (board[row][col] === 0) {
-                cell = document.createElement('div');
-                cell.dataset.disabled = '0';
-                cell.dataset.isSelected = '0';
-                cell.addEventListener('click',()=>{
-                    resetIsSelected()
-                    cell.dataset.isSelected = '1';
-                    selectedCell = cell;
-                })
-            } else {
-                cell = document.createElement('div');
-                cell.innerHTML = board[row][col].toString();
-                cell.dataset.disabled = '1';
-            }
-            cell.className = 'cell';
-            cell.id = `cell-${row}-${col}`;
-            if (container) {
-                container.appendChild(cell);
+    for (let box = 0; box < 9; box++) {
+        const startRow = (box - box%3);
+        const startCol = (box%3)*3;
+        
+        let boxElement = document.createElement('span');
+        boxElement.classList.add('box');
+
+        for (let row = startRow; row < startRow+3; row++) {
+            for (let col = startCol; col < startCol+3; col++) {
+                let cell: HTMLDivElement;
+                if (board[row][col] === 0) {
+                    cell = document.createElement('div');
+                    cell.dataset.disabled = '0';
+                    cell.dataset.isSelected = '0';
+                    cell.addEventListener('click',()=>{
+                        resetIsSelected()
+                        cell.dataset.isSelected = '1';
+                        selectedCell = cell;
+                    })
+                } else {
+                    cell = document.createElement('div');
+                    cell.innerHTML = board[row][col].toString();
+                    cell.dataset.disabled = '1';
+                }
+                cell.className = 'cell';
+                cell.id = `cell-${row}-${col}`;
+                boxElement.appendChild(cell);
             }
         }
+
+        container.appendChild(boxElement);
     }
 }
 
-// Resets the is selected data attribtue for all cells
+// Resets the 'data-is-selected' data attribtue for all cells
 function resetIsSelected() {
     const cells = document.querySelectorAll('div.cell');
 
@@ -140,22 +148,29 @@ function setClearButton() {
     });
 }
 
+// Returns the current board state by reading the Dom
 function getCurrentBoardState(): number[][] {
     const cells = document.querySelectorAll('div.cell');
     const out = getBoardWithZeros();
 
-    for (let row = 0; row < out.length; row++) {
-        for (let col = 0; col < out[row].length; col++) {
-            const cell = cells[row*9+col];
-            let cellValue = parseInt(cell.innerHTML);
-            if (Number.isNaN(cellValue)) {
-                out[row][col] = 0;
-            } else {
-                out[row][col] = cellValue;
+    let currentCellIndex = 0;
+    for (let box = 0; box < 9; box++) {
+        const startRow = (box - box%3);
+        const startCol = (box%3)*3;
+
+        for (let row = startRow; row < startRow+3; row++) {
+            for (let col = startCol; col < startCol+3; col++) {
+                const cell = cells[currentCellIndex];
+                let cellValue = parseInt(cell.innerHTML);
+                if (Number.isNaN(cellValue)) {
+                    out[row][col] = 0;
+                } else {
+                    out[row][col] = cellValue;
+                }
+                currentCellIndex++;
             }
         }
     }
-    console.log(out);
     return out;
 }
 
@@ -171,9 +186,8 @@ function setSolveButton() {
             if (isSolvable) {
                 displayBoard(tempBoard);
             } else {
-                // This error should never occur if generating 
-                //    and solving algorithm are correctly implemented
-                alert('This puzzle is not solvable :(, (UNEXPECTED ERROR)');
+                // TODO: Decide if the user edits are overwritten?
+                alert('This puzzle is not solvable :(, (TODO)');
             }
         }
     });
