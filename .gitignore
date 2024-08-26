@@ -1,2 +1,3 @@
 node_modules 
-solve.js 
+solve.js
+dest/scripts/**/*.*
