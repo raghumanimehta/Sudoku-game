@@ -11,31 +11,38 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    /* flex-direction: column; */
 }
 
 .buttons {
-    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1vw;
 }
 
 #container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    border: 2px solid #000; 
+    border: 2px solid #000;
+    width: 40vw;
+    aspect-ratio: 1;
 }
 
 .box {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
     border: 2px solid #000;
 }
 
 .cell {
-    width: 75px;
-    height: 75px;
+    /* width: 75px;
+    height: 75px; */
     background-color: #fff;
     padding: 10px;
     border: 1.5px solid #2e2e2e; 
-    font-size: 32px;
+    font-size: 2vw;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -68,15 +75,22 @@ body {
     outline: none;
 }
 
+#right-container,
+#options-container,
 #numberButtonsContainer {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    margin-top: 20px;
-    border-radius: 5px;
-    width:  100px;
-    height:  100px;
+    outline: 1px solid orange;
 }
 
+#right-container {
+    width: 30vw;
+    margin-left: 1vw;
+}
+
+#options-container {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    column-gap: 1vw;
+}
 
 .layout {
     display: flex;
@@ -84,8 +98,6 @@ body {
     align-items: flex-start;
 }
 
-.buttons {
-    margin-left: 20px;
-    display: flex;
-    flex-direction: column;
+@media (orientation: landscape) {
+    
 }

@@ -38,3 +38,10 @@ should have exactly
 1) Hard: 30 [28-31]
 1) Very Hard: 26 [24-27]
 1) `test and keep if possible !!!` Evil: 17
+
+
+# Development guide
+```sh
+npx tsc -w
+```
+
