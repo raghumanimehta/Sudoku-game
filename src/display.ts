@@ -207,18 +207,24 @@ function setSolveButton() {
     const solveButton = document.getElementById('solveButton');
     solveButton?.addEventListener('click', function() {
         if (isSolved(getCurrentBoardState())) {
-            alert('The puzzle is solved!');
+            alert('The puzzle is already solved!');
         } else {
             const tempBoard = duplicateBoard(getCurrentBoardState());
             const isSolvable = solveBoard(tempBoard);
             if (isSolvable) {
                 displayBoard(tempBoard);
             } else {
-                // TODO: Decide if the user edits are overwritten?
-                alert('This puzzle is not solvable :(, (TODO)');
+                // the user is prompted to overwrite the current progress
+                const isConfirmed = confirm('Do you want to overwrite your current progress and get the solution?');
+                if (isConfirmed) {
+                    const tempBoard = duplicateBoard(initialBoard);
+                    solveBoard(tempBoard);
+                    displayBoard(tempBoard);
+                } 
             }
         }
     });
+}
 }
 
 // Overwrites the HTMLDom board with given board
