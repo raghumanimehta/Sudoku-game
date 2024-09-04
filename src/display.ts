@@ -225,7 +225,7 @@ function setSolveButton() {
         }
     });
 }
-}
+
 
 // Overwrites the HTMLDom board with given board
 function displayBoard(board: number[][]) {
