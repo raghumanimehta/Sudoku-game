@@ -7,8 +7,10 @@ import {
 } from "./solve.js";
 
 // Class that interacts with the selected cell
+
 class SelectedCell {
     private currentCell: HTMLDivElement | null = null;
+    private isNoteMode: boolean = false;
     
     SelectedCell() {
         this.resetIsSelected();
@@ -31,14 +33,38 @@ class SelectedCell {
         }
     }
 
+    toggleNoteMode() {
+        this.isNoteMode = !this.isNoteMode;
+        if (this.currentCell) {
+            this.currentCell.classList.toggle('note-mode', this.isNoteMode);
+        }
+    }
+
     setValue(value: string) {
         if (this.currentCell === null) return;
-        this.currentCell.innerHTML = value;
+        if (this.isNoteMode) {
+            this.setNoteValue(value);
+        } else {
+            this.currentCell.innerHTML = value;
+            this.currentCell.dataset.notes = '000000000';
+            this.currentCell.classList.remove('note-mode');
+        }
     }
+
+    setNoteValue(value: string) {
+        if (this.currentCell === null) return;
+        const notes = this.currentCell.dataset.notes || '000000000';
+        const index = parseInt(value) - 1;
+        if (isNaN(index) || index < 0 || index > 8) return;
+        
+        const newNotes = notes.split('');
+        newNotes[index] = newNotes[index] === '0' ? '1' : '0'; // Review later  
+        this.currentCell.dataset.notes = newNotes.join('');
+    }
+
 
     private resetIsSelected() {
         const cells = document.querySelectorAll('div.cell');
-
         cells.forEach(cell => {
             (cell as HTMLDivElement).dataset.isSelected = '0';
             (cell as HTMLDivElement).dataset.isHighlighted = '0';
@@ -97,6 +123,7 @@ function initializeBoard() {
                 }
                 cell.dataset.column = col.toString();
                 cell.dataset.row = row.toString();
+                cell.dataset.notes = '000000000';
                 cell.className = 'cell';
                 cell.id = `cell-${row}-${col}`;
                 boxElement.appendChild(cell);
@@ -247,6 +274,8 @@ function displayBoard(board: number[][]) {
 function setTogleNoteModeButton() {
     const toggleNoteButton = document.getElementById('noteButton');
     toggleNoteButton?.addEventListener('click', function() {
-        alert("Function not implemented.");
+        selectedCell.toggleNoteMode();
     });
 }
+
+
