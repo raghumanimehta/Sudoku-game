@@ -18,13 +18,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1vw;
+    /* font-size: 1vw; */
 }
 
 #container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    border: 2px solid #000;
+    border: 0.2vw solid #000;
     width: 40vw;
     aspect-ratio: 1;
 }
@@ -33,14 +33,11 @@ body {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    border: 2px solid #000;
+    border: 0.075vw solid #000000;
 }
 
 .cell {
-    /* width: 75px;
-    height: 75px; */
     background-color: #fff;
-    padding: 10px;
     border: 1.5px solid #2e2e2e; 
     font-size: 2vw;
     cursor: pointer;
@@ -78,18 +75,42 @@ body {
 #right-container,
 #options-container,
 #numberButtonsContainer {
-    outline: 1px solid orange;
+    /* outline: 1px solid orange; */
+}
+
+#numberButtonsContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    aspect-ratio: 1.75;
+}
+
+#numberButtonsContainer button {
+    margin: 0.1vw;
+   
 }
 
 #right-container {
-    width: 30vw;
+    width: 35vw;
     margin-left: 1vw;
+    padding: 0px 3vw;
 }
 
 #options-container {
     display: grid;
     grid-template-columns: repeat(4,1fr);
-    column-gap: 1vw;
+    column-gap: 0.2vw;
+    aspect-ratio: 6.5;
+    margin-bottom: 0.5vw;
+
+}
+
+button {
+    font-size: 1.65vw;
+}
+
+#options-container button {
+    font-size: 1.35vw;
 }
 
 .layout {
@@ -98,6 +119,65 @@ body {
     align-items: flex-start;
 }
 
-@media (orientation: landscape) {
+@media (orientation: portrait) {
+    body {
+        flex-direction: column;
+    }
+
+    #container {
+        width: 85vw;
+        border: 0.2vh solid #000;
+    }
+
+    button {
+        font-size: 1.65vh;
+    }
     
+    #options-container button {
+        font-size: 1.35vh;
+    }
+
+    
+    
+    .box {
+        border: 0.075vh solid #000000;
+    }
+
+    .cell {
+        font-size: 2vh;
+    }
+
+
+    #numberButtonsContainer button {
+        margin: 0.1vh;
+    
+    }
+
+    #right-container {
+        width: 50vh;
+        margin-left: 0vw;
+        margin-top: 1.65vh;
+        padding: 0px 3vw;
+    }
+
+    #options-container {
+        column-gap: 0.2vh;
+        aspect-ratio: 9.5;
+        margin-bottom: 0.5vw;
+        
+
+    }
+
+    button {
+        font-size: 2.7vh;
+    }
+
+    #options-container button {
+        font-size: 2vh;
+    }
+
+        
+        
+
+
 }

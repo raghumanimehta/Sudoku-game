@@ -7,7 +7,6 @@ import {
 } from "./solve.js";
 
 // Class that interacts with the selected cell
-
 class SelectedCell {
     private currentCell: HTMLDivElement | null = null;
     private isNoteMode: boolean = false;
