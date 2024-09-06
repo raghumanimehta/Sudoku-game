@@ -32,13 +32,6 @@ button:hover {
     transform: scale(1.05);
 }
 
-.buttons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-}
-
 #container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
