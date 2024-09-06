@@ -1,24 +1,43 @@
 * {
     box-sizing: border-box;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 body {
     height: 100dvh;
     width: 100dvw;
-    background-color: cyan;
+    background-color: #fdf6e3; /* Soft cream background for a clean look */
+    background-image: radial-gradient(circle at top left, #c8d5b9, #faf3dd); /* Subtle radial gradient for a smooth, fresh effect */
     display: flex;
     justify-content: center;
     align-items: center;
-    /* flex-direction: column; */
+    padding: 1rem;
+    font-family: 'Arial', sans-serif; /* Modern sans-serif font */
+}
+
+button {
+    font-size: 1.5vw;
+    padding: 0.5rem 1rem;
+    background-color: #ff7043; /* Bold, modern orange button */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #e64a19;
+    transform: scale(1.05);
 }
 
 .buttons {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* font-size: 1vw; */
+    gap: 0.5rem;
 }
 
 #container {
@@ -27,6 +46,10 @@ body {
     border: 0.2vw solid #000;
     width: 40vw;
     aspect-ratio: 1;
+    background-color: #ffffff;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 12px; /* Soft rounded corners */
+    overflow: hidden;
 }
 
 .box {
@@ -38,7 +61,7 @@ body {
 
 .cell {
     background-color: #fff;
-    border: 1.5px solid #2e2e2e; 
+    border: 1.5px solid #2e2e2e;
     font-size: 2vw;
     cursor: pointer;
     display: flex;
@@ -46,36 +69,43 @@ body {
     justify-content: center;
     text-align: center;
     box-sizing: border-box;
-    color: rgb(55, 89, 192); 
+    color: #3759c0; /* Soft blue text */
     font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .cell[data-disabled='1'] {
     color: black;
     font-weight: normal;
-    background-color: #fefefe;
 }
 
 .cell[data-is-highlighted='1'] {
-    background-color: rgb(146, 164, 146);
+    background-color: #8bc34a; /* Fresh green for highlights */
+    color:#fff; /*White text for contrast*/
+    box-shadow: inset 0px 0px 6px rgba(0, 0, 0, 0.2);
 }
-
+.cell[data-disabled='0'][data-is-highlighted='1']{
+    color: #3759c0; 
+}
 .cell[data-is-selected='1'] {
-    color: orange;
-    background-color: #ddd;
+    color: #ff8c00; /* Bright orange for selected text */
+    background-color: #e0e0e0; /* Light grey background */
     font-weight: normal;
+    box-shadow: inset 0px 0px 8px rgba(0, 0, 0, 0.2);
 }
 
 .cell:hover,
 .cell:focus {
-    background-color: #ddd;
+    background-color: #e6e6e6;
+    transform: scale(1.08);
     outline: none;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 #right-container,
 #options-container,
 #numberButtonsContainer {
-    /* outline: 1px solid orange; */
+    margin-top: 1rem;
 }
 
 #numberButtonsContainer {
@@ -83,45 +113,63 @@ body {
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
     aspect-ratio: 1.75;
+    gap: 0.5rem;
 }
 
 #numberButtonsContainer button {
-    margin: 0.1vw;
-   
+    margin: 0.2vw;
+    padding: 0.5rem;
+    background-color: #81c784; /* Refreshing teal-green for buttons */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#numberButtonsContainer button:hover {
+    background-color: #66bb6a;
+    transform: scale(1.1);
 }
 
 #right-container {
     width: 35vw;
-    margin-left: 1vw;
-    padding: 0px 3vw;
+    margin-left: 2vw;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.8); /* Light transparent white */
+    backdrop-filter: blur(6px); /* Slight blur effect for modern look */
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 #options-container {
     display: grid;
-    grid-template-columns: repeat(4,1fr);
-    column-gap: 0.2vw;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 0.5rem;
     aspect-ratio: 6.5;
-    margin-bottom: 0.5vw;
-
-}
-
-button {
-    font-size: 1.65vw;
+    margin-bottom: 1rem;
 }
 
 #options-container button {
-    font-size: 1.35vw;
+    font-size: 1.3vw;
+    padding: 0.4rem;
+    background-color: #4caf50; /* Green shade for option buttons */
+    color: white;
+    filter: brightness(95%);
 }
 
 .layout {
     display: flex;
     justify-content: center;
     align-items: flex-start;
+    gap: 1rem;
 }
 
 @media (orientation: portrait) {
     body {
         flex-direction: column;
+        padding: 0.5rem;
     }
 
     #container {
@@ -130,15 +178,14 @@ button {
     }
 
     button {
-        font-size: 1.65vh;
-    }
-    
-    #options-container button {
-        font-size: 1.35vh;
+        font-size: 1.8vh;
+        padding: 0.7rem 1.2rem;
     }
 
-    
-    
+    #options-container button {
+        font-size: 1.4vh;
+    }
+
     .box {
         border: 0.075vh solid #000000;
     }
@@ -147,37 +194,21 @@ button {
         font-size: 2vh;
     }
 
-
     #numberButtonsContainer button {
         margin: 0.1vh;
-    
     }
 
     #right-container {
         width: 50vh;
-        margin-left: 0vw;
-        margin-top: 1.65vh;
+        margin-left: 0;
+        margin-top: 2vh;
         padding: 0px 3vw;
     }
 
     #options-container {
         column-gap: 0.2vh;
         aspect-ratio: 9.5;
-        margin-bottom: 0.5vw;
-        
+        margin-bottom: 0.5vw
 
     }
-
-    button {
-        font-size: 2.7vh;
-    }
-
-    #options-container button {
-        font-size: 2vh;
-    }
-
-        
-        
-
-
 }
