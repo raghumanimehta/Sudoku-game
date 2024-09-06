@@ -198,6 +198,8 @@ function setCheckButton() {
 function setClearButton() {
     const checkButton = document.getElementById('clearButton');
     checkButton?.addEventListener('click', function() {
+        const isConfirmed:boolean = confirm('Do you want to clear your work?');
+        if (!isConfirmed) return;
         displayBoard(initialBoard);
     });
 }
@@ -232,6 +234,8 @@ function getCurrentBoardState(): number[][] {
 function setSolveButton() {
     const solveButton = document.getElementById('solveButton');
     solveButton?.addEventListener('click', function() {
+        const isConfirmed:boolean = confirm('Do you want to see the solution?');
+        if (!isConfirmed) return;
         if (isSolved(getCurrentBoardState())) {
             alert('The puzzle is already solved!');
         } else {
@@ -241,7 +245,7 @@ function setSolveButton() {
                 displayBoard(tempBoard);
             } else {
                 // the user is prompted to overwrite the current progress
-                const isConfirmed = confirm('Do you want to overwrite your current progress and get the solution?');
+                const isConfirmed = confirm('your progress will be lost, do you want to continue?');
                 if (isConfirmed) {
                     const tempBoard = duplicateBoard(initialBoard);
                     solveBoard(tempBoard);
