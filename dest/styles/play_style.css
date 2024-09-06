@@ -36,7 +36,6 @@ button:hover {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     border: 0.2vw solid #000;
-    width: 40vw;
     aspect-ratio: 1;
     background-color: #ffffff;
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
@@ -55,6 +54,7 @@ button:hover {
     background-color: #fff;
     border: 1.5px solid #2e2e2e;
     font-size: 2vw;
+    width: 5vw;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -92,6 +92,50 @@ button:hover {
     transform: scale(1.08);
     outline: none;
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.cell.note-mode {
+    font-size: 0px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+}
+
+.cell:not(.note-mode) .sub-note {
+    font-size: 0vw;
+}
+
+.note-mode .sub-note {
+    font-size: 1.2vw;
+    text-align: center;
+}
+
+.cell[data-note-1='0'] :nth-child(1) {
+    font-size: 0px;
+}
+.cell[data-note-2='0'] :nth-child(2) {
+    font-size: 0px;
+}
+.cell[data-note-3='0'] :nth-child(3) {
+    font-size: 0px;
+}
+.cell[data-note-4='0'] :nth-child(4) {
+    font-size: 0px;
+}
+.cell[data-note-5='0'] :nth-child(5) {
+    font-size: 0px;
+}
+.cell[data-note-6='0'] :nth-child(6) {
+    font-size: 0px;
+}
+.cell[data-note-7='0'] :nth-child(7) {
+    font-size: 0px;
+}
+.cell[data-note-8='0'] :nth-child(8) {
+    font-size: 0px;
+}
+.cell[data-note-9='0'] :nth-child(9) {
+    font-size: 0px;
 }
 
 #right-container,

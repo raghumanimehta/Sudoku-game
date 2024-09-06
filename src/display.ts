@@ -9,7 +9,6 @@ import {
 // Class that interacts with the selected cell
 class SelectedCell {
     private currentCell: HTMLDivElement | null = null;
-    private isNoteMode: boolean = false;
     
     SelectedCell() {
         this.resetIsSelected();
@@ -32,33 +31,43 @@ class SelectedCell {
         }
     }
 
-    toggleNoteMode() {
-        this.isNoteMode = !this.isNoteMode;
-        if (this.currentCell) {
-            this.currentCell.classList.toggle('note-mode', this.isNoteMode);
+    toggleNoteMode(): void {
+        if (this.currentCell == null) return;
+        if (this.isNoteModeActivated()) {
+            this.currentCell.classList.remove('note-mode');
+            this.currentCell.innerHTML = '';
+        } else {
+            this.currentCell.classList.add('note-mode');
+            for (let i = 1; i < 10; i++) {
+                const subNote = document.createElement('div');
+                subNote.classList.add(`sub-note`);
+                subNote.innerHTML = `${i}`;
+                this.currentCell.appendChild(subNote);
+            }
         }
     }
 
-    setValue(value: string) {
+    isNoteModeActivated(): boolean {
+        if (this.currentCell == null) return false;
+        return this.currentCell.classList.contains('note-mode');
+    }
+
+    setValue(value: string):void {
         if (this.currentCell === null) return;
-        if (this.isNoteMode) {
+        if (this.isNoteModeActivated()) {
             this.setNoteValue(value);
         } else {
             this.currentCell.innerHTML = value;
-            this.currentCell.dataset.notes = '000000000';
-            this.currentCell.classList.remove('note-mode');
         }
     }
 
-    setNoteValue(value: string) {
+    setNoteValue(value: string):void {
         if (this.currentCell === null) return;
-        const notes = this.currentCell.dataset.notes || '000000000';
-        const index = parseInt(value) - 1;
-        if (isNaN(index) || index < 0 || index > 8) return;
-        
-        const newNotes = notes.split('');
-        newNotes[index] = newNotes[index] === '0' ? '1' : '0'; // Review later  
-        this.currentCell.dataset.notes = newNotes.join('');
+        if (this.currentCell.dataset[`note-${value}`] === '0') {
+            this.currentCell.dataset[`note-${value}`] = '1';
+        } else {
+            this.currentCell.dataset[`note-${value}`] = '0';
+        }
     }
 
 
@@ -115,16 +124,19 @@ function initializeBoard() {
                     cell.addEventListener('click',()=>{
                         selectedCell.setCell(cell);
                     })
-                } else {
+                    for (let i = 1; i <= 9; i++) {
+                        cell.dataset[`note-${i}`] = '0';
+                    }
+                } else { // fixed values
                     cell = document.createElement('div');
                     cell.innerHTML = board[row][col].toString();
                     cell.dataset.disabled = '1';
                 }
                 cell.dataset.column = col.toString();
                 cell.dataset.row = row.toString();
-                cell.dataset.notes = '000000000';
                 cell.className = 'cell';
                 cell.id = `cell-${row}-${col}`;
+
                 boxElement.appendChild(cell);
             }
         }
@@ -267,7 +279,11 @@ function displayBoard(board: number[][]) {
                 if (board[row][col] != 0) {
                     value = board[row][col].toString();
                 }
-                (cell as HTMLDivElement).innerText = value;
+                (cell as HTMLDivElement).innerHTML = value;
+                cell.classList.remove('note-mode');
+                for (let i = 1; i <= 9; i++) {
+                    cell.dataset[`note-${i}`] = '0';
+                }
             }
         }
     }
