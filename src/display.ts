@@ -18,7 +18,7 @@ class SelectedCell {
         this.resetIsSelected();
         this.currentCell = newCell;
         this.currentCell.dataset.isSelected = '1'
-        // Set row-col highlighting
+        // Set row-col highlighting 
         for (let row = 0; row < 9; row++) {
             const cell = document.getElementById(`cell-${row}-${newCell.dataset.column}`);
             if (cell === null) return;
@@ -119,17 +119,18 @@ class RadioButton {
     }
 
     changeDifficulty(difficulty: number): void {
+
         let previousDif = parseInt(localStorage.getItem('dif') || '0');
         if (difficulty === previousDif && confirm('Do you want to start a new game with the same difficulty?')) {
+            localStorage.setItem('dif', difficulty.toString());
             initializeBoard();
-            return
+            return;
         }
         if (!confirm('Do you want to change the difficulty?')) {
             return;
         }
         let previousButton: HTMLInputElement = this.getButtonForDifficulty(previousDif);
         previousButton.checked = false;
-        // previousButton.dataset.selected = '0';
         this.setAllToZero();
         let newButton: HTMLInputElement = this.getButtonForDifficulty(difficulty);
         newButton.checked = true;
@@ -137,7 +138,6 @@ class RadioButton {
         this.selectedButton = newButton;
         localStorage.setItem('dif', difficulty.toString());
         initializeBoard();
-        
     }
 
     setAllToZero(): void {
@@ -192,14 +192,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Display the board in the default mode
 function initializeBoard() {
-    let board: number[][] = generateSudoku(Number.parseInt(localStorage.getItem('dif') || '0'));
+    let board: number[][] = generateSudoku(parseInt(localStorage.getItem('dif') || '0'));
     initialBoard = board;
-    
+    console.log(board);
     const container = document.querySelector('#container');
     if (!container) {
         return;
     }
-    
+    container.innerHTML = '';
     for (let box = 0; box < 9; box++) {
         const startRow = (box - box%3);
         const startCol = (box%3)*3;
