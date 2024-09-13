@@ -86,7 +86,7 @@ class RadioButton {
     private hardButton: HTMLInputElement;
     private veryHardButton: HTMLInputElement;
     private evilButton: HTMLInputElement;
-    private selectedButton: HTMLInputElement;
+    public selectedButton: HTMLInputElement;
 
 
     constructor(currentlySelected: number) {
@@ -97,6 +97,8 @@ class RadioButton {
         this.evilButton = document.getElementById('evil-button') as HTMLInputElement;
         this.selectedButton = this.getButtonForDifficulty(currentlySelected);
         this.addEvenetListeners();
+        this.selectedButton.checked = true;
+        this.selectedButton.dataset.selected = '1';
     } 
 
     getButtonForDifficulty(difficulty: number): HTMLInputElement {
@@ -116,48 +118,66 @@ class RadioButton {
         }
     }
 
-    changeDifficulty(difficulty: number, previousDif: number): void {
-        if (confirm('Do you want to change the difficulty?')) {
-            let previousButton: HTMLInputElement = this.getButtonForDifficulty(previousDif);
-            previousButton.checked = false;
-            previousButton.dataset.selected = '0';
-            let newButton: HTMLInputElement = this.getButtonForDifficulty(difficulty);
-            newButton.checked = true;
-            newButton.dataset.selected = '1';
-            this.selectedButton = newButton;
-            localStorage.setItem('dif', difficulty.toString());
-            window.location.reload();
+    changeDifficulty(difficulty: number): void {
+        let previousDif = parseInt(localStorage.getItem('dif') || '0');
+        if (difficulty === previousDif && confirm('Do you want to start a new game with the same difficulty?')) {
+            initializeBoard();
+            return
         }
+        if (!confirm('Do you want to change the difficulty?')) {
+            return;
+        }
+        let previousButton: HTMLInputElement = this.getButtonForDifficulty(previousDif);
+        previousButton.checked = false;
+        // previousButton.dataset.selected = '0';
+        this.setAllToZero();
+        let newButton: HTMLInputElement = this.getButtonForDifficulty(difficulty);
+        newButton.checked = true;
+        newButton.dataset.selected = '1';
+        this.selectedButton = newButton;
+        localStorage.setItem('dif', difficulty.toString());
+        initializeBoard();
+        
     }
+
+    setAllToZero(): void {
+        this.easyButton.dataset.selected = '0';
+        this.mediumButton.dataset.selected = '0';
+        this.hardButton.dataset.selected = '0';
+        this.veryHardButton.dataset.selected = '0';
+        this.evilButton.dataset.selected = '0';
+    }
+
+   
 
     addEvenetListeners(): void {
         this.easyButton.addEventListener('click', () => {
-            this.changeDifficulty(0, parseInt(localStorage.getItem('dif') || '0'));
+            this.changeDifficulty(0);
         });
         this.mediumButton.addEventListener('click', () => {
-            this.changeDifficulty(1, parseInt(localStorage.getItem('dif') || '0'));
+            this.changeDifficulty(1);
         });
         this.hardButton.addEventListener('click', () => {  
-            this.changeDifficulty(2, parseInt(localStorage.getItem('dif') || '0'));
+            this.changeDifficulty(2);
         });
         this.veryHardButton.addEventListener('click', () => {
-            this.changeDifficulty(3, parseInt(localStorage.getItem('dif') || '0'));
+            this.changeDifficulty(3);
         });
         this.evilButton.addEventListener('click', () => {
-            this.changeDifficulty(4, parseInt(localStorage.getItem('dif') || '0'));
+            this.changeDifficulty(4);
         });
     }
 
 }
 
 let initialBoard: number[][]; // The initial board state
-let difficulty: number;
+// let difficulty: number;
 let selectedCell: SelectedCell;
 let chosenDifficulty: RadioButton;
 
 document.addEventListener('DOMContentLoaded', function() {
-    difficulty = parseInt(localStorage.getItem('dif') || '0');
-    chosenDifficulty = new RadioButton(difficulty);
+    // difficulty = parseInt(localStorage.getItem('dif') || '0');
+    chosenDifficulty = new RadioButton(parseInt(localStorage.getItem('dif') || '0'));
     // displayDifficulty();
     initializeBoard();
     
@@ -172,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Display the board in the default mode
 function initializeBoard() {
-    let board: number[][] = generateSudoku(difficulty);
+    let board: number[][] = generateSudoku(Number.parseInt(localStorage.getItem('dif') || '0'));
     initialBoard = board;
     
     const container = document.querySelector('#container');
@@ -219,31 +239,31 @@ function initializeBoard() {
     selectedCell = new SelectedCell();
 }
 
-// Displays the difficulty level
-function displayDifficulty() {
-    const difficultyElement = document.getElementById('difficulty');
-    if (difficultyElement) {
-        switch (difficulty) {
-            case 0:
-                difficultyElement.innerText = 'Difficulty: Easy';
-                break;
-            case 1:
-                difficultyElement.innerText = 'Difficulty: Medium';
-                break;
-            case 2:
-                difficultyElement.innerText = 'Difficulty: Hard';
-                break;
-            case 3:
-                difficultyElement.innerText = 'Difficulty: Very Hard';
-                break;
-            case 4:
-                difficultyElement.innerText = 'Difficulty: Evil';
-                break;
-            default:
-                difficultyElement.innerText = 'Difficulty: Medium';
-        }
-    }
-}
+// // Displays the difficulty level
+// function displayDifficulty() {
+//     const difficultyElement = document.getElementById('difficulty');
+//     if (difficultyElement) {
+//         switch (difficulty) {
+//             case 0:
+//                 difficultyElement.innerText = 'Difficulty: Easy';
+//                 break;
+//             case 1:
+//                 difficultyElement.innerText = 'Difficulty: Medium';
+//                 break;
+//             case 2:
+//                 difficultyElement.innerText = 'Difficulty: Hard';
+//                 break;
+//             case 3:
+//                 difficultyElement.innerText = 'Difficulty: Very Hard';
+//                 break;
+//             case 4:
+//                 difficultyElement.innerText = 'Difficulty: Evil';
+//                 break;
+//             default:
+//                 difficultyElement.innerText = 'Difficulty: Medium';
+//         }
+//     }
+// }
 
 // Add event listeners to number buttons 
 function setNumberButtons(): void {

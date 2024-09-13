@@ -19,13 +19,8 @@
     </div>
     
     <script>
-        
-        document.getElementById('difficulty').addEventListener('change', function() {
-            localStorage.setItem('dif', document.getElementById('difficulty').value);
-        });
-
-
         document.getElementById('playButton').addEventListener('click', function() {
+            localStorage.setItem('dif', document.getElementById('difficulty').value);
             window.location.href = 'play.html';
         });
 

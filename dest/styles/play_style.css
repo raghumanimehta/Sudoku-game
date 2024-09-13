@@ -19,7 +19,6 @@ body {
 button {
     font-size: 1.5vw;
     padding: 0.5rem 1rem;
-    background-color: #ff7043; /* Bold, modern orange button */
     color: white;
     border: none;
     border-radius: 6px;
@@ -69,11 +68,28 @@ button:hover {
     transition: background-color 0.3s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-#difficulty {
+#diffButtons {
     display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-right: 1vw;
+}
+
+#diffButtons button {
+    display: flex;
+    flex-direction: row;
     justify-content: center;
     font-size: 1.5vw; 
     margin-bottom: 1vw;
+    gap: 1vw;
+    color: #4caf50;
+    background-color: #fff;
+    margin-left: 2vw; 
+}
+
+#diffButtons button[data-selected='1'] {
+    color: #fff;
+    background-color: #4caf50; 
 }
 
 .cell[data-disabled='1'] {
@@ -188,7 +204,7 @@ button:hover {
 
 /* Right container */
 #right-container {
-    width: 35vw;
+    width: 30vw;
     margin-left: 2vw;
     padding: 1rem;
     background-color: rgba(255, 255, 255, 0.8); /* Light transparent white */
