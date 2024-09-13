@@ -32,6 +32,7 @@ button:hover {
     transform: scale(1.05);
 }
 
+/* Main Sudoku grid */
 #container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -39,22 +40,24 @@ button:hover {
     aspect-ratio: 1;
     background-color: #ffffff;
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
-    border-radius: 12px; /* Soft rounded corners */
     overflow: hidden;
 }
 
+/* Smaller 3x3 boxes inside the grid */
 .box {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    border: 0.075vw solid #000000;
+    border: 0.075vw solid #000000; /* Ensure borders for each 3x3 sub-grid */
 }
 
+/* Individual cells */
 .cell {
     background-color: #fff;
-    border: 1.5px solid #2e2e2e;
+    border: 1.5px solid #2e2e2e; /* Add cell borders */
     font-size: 2vw;
     width: 5vw;
+    height: 5vw; /* Ensure cells maintain fixed dimensions */
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -66,6 +69,13 @@ button:hover {
     transition: background-color 0.3s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
 
+#difficulty {
+    display: flex;
+    justify-content: center;
+    font-size: 1.5vw; 
+    margin-bottom: 1vw;
+}
+
 .cell[data-disabled='1'] {
     color: black;
     font-weight: normal;
@@ -73,12 +83,14 @@ button:hover {
 
 .cell[data-is-highlighted='1'] {
     background-color: #8bc34a; /* Fresh green for highlights */
-    color:#fff; /*White text for contrast*/
+    color:#fff; /* White text for contrast */
     box-shadow: inset 0px 0px 6px rgba(0, 0, 0, 0.2);
 }
-.cell[data-disabled='0'][data-is-highlighted='1']{
+
+.cell[data-disabled='0'][data-is-highlighted='1'] {
     color: #3759c0; 
 }
+
 .cell[data-is-selected='1'] {
     color: #ff8c00; /* Bright orange for selected text */
     background-color: #e0e0e0; /* Light grey background */
@@ -92,24 +104,34 @@ button:hover {
     transform: scale(1.08);
     outline: none;
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+    border: 1.5px solid #2e2e2e; /* Reinforce border on hover */
 }
 
+/* Note mode specific styles */
 .cell.note-mode {
-    font-size: 0px;
+    font-size: 0; /* Hide large text */
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
+    border: 1.5px solid #2e2e2e; /* Ensure borders remain visible in note mode */
 }
 
-.cell:not(.note-mode) .sub-note {
-    font-size: 0vw;
-}
-
+/* Sub-note styling */
 .note-mode .sub-note {
     font-size: 1.2vw;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+.sub-note {
+    border: 0.5px solid #ccc; /* Subtle borders around each sub-note */
+    width: 100%;
+    height: 100%; /* Maintain sub-note's relative size within the cell */
+}
+
+/* Ensure sub-note visibility based on data attributes */
 .cell[data-note-1='0'] :nth-child(1) {
     font-size: 0px;
 }
@@ -138,12 +160,7 @@ button:hover {
     font-size: 0px;
 }
 
-#right-container,
-#options-container,
-#numberButtonsContainer {
-    margin-top: 1rem;
-}
-
+/* Number buttons container */
 #numberButtonsContainer {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -169,6 +186,7 @@ button:hover {
     transform: scale(1.1);
 }
 
+/* Right container */
 #right-container {
     width: 35vw;
     margin-left: 2vw;
@@ -179,6 +197,7 @@ button:hover {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
 }
 
+/* Options container */
 #options-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -199,6 +218,7 @@ button:hover {
     background-color: #43A047;
 }
 
+/* Layout for the entire game */
 .layout {
     display: flex;
     justify-content: center;
@@ -206,6 +226,7 @@ button:hover {
     gap: 1rem;
 }
 
+/* Responsive layout for portrait mode */
 @media (orientation: portrait) {
     body {
         flex-direction: column;
@@ -248,7 +269,6 @@ button:hover {
     #options-container {
         column-gap: 0.2vh;
         aspect-ratio: 9.5;
-        margin-bottom: 0.5vw
-
+        margin-bottom: 0.5vw;
     }
 }

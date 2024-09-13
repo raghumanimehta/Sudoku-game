@@ -80,13 +80,85 @@ class SelectedCell {
     }
 }
 
+class RadioButton {
+    private easyButton: HTMLInputElement;
+    private mediumButton: HTMLInputElement;
+    private hardButton: HTMLInputElement;
+    private veryHardButton: HTMLInputElement;
+    private evilButton: HTMLInputElement;
+    private selectedButton: HTMLInputElement;
+
+
+    constructor(currentlySelected: number) {
+        this.easyButton = document.getElementById('easy-button') as HTMLInputElement;  
+        this.mediumButton = document.getElementById('medium-button') as HTMLInputElement;  
+        this.hardButton = document.getElementById('hard-button') as HTMLInputElement;  
+        this.veryHardButton = document.getElementById('very-hard-button') as HTMLInputElement;
+        this.evilButton = document.getElementById('evil-button') as HTMLInputElement;
+        this.selectedButton = this.getButtonForDifficulty(currentlySelected);
+        this.addEvenetListeners();
+    } 
+
+    getButtonForDifficulty(difficulty: number): HTMLInputElement {
+        switch (difficulty) {
+            case 0:
+                return this.easyButton;
+            case 1:
+                return this.mediumButton;
+            case 2:
+                return this.hardButton;
+            case 3:
+                return this.veryHardButton;
+            case 4:
+                return this.evilButton;
+            default:
+                return this.mediumButton;
+        }
+    }
+
+    changeDifficulty(difficulty: number, previousDif: number): void {
+        if (confirm('Do you want to change the difficulty?')) {
+            let previousButton: HTMLInputElement = this.getButtonForDifficulty(previousDif);
+            previousButton.checked = false;
+            previousButton.dataset.selected = '0';
+            let newButton: HTMLInputElement = this.getButtonForDifficulty(difficulty);
+            newButton.checked = true;
+            newButton.dataset.selected = '1';
+            this.selectedButton = newButton;
+            localStorage.setItem('dif', difficulty.toString());
+            window.location.reload();
+        }
+    }
+
+    addEvenetListeners(): void {
+        this.easyButton.addEventListener('click', () => {
+            this.changeDifficulty(0, parseInt(localStorage.getItem('dif') || '0'));
+        });
+        this.mediumButton.addEventListener('click', () => {
+            this.changeDifficulty(1, parseInt(localStorage.getItem('dif') || '0'));
+        });
+        this.hardButton.addEventListener('click', () => {  
+            this.changeDifficulty(2, parseInt(localStorage.getItem('dif') || '0'));
+        });
+        this.veryHardButton.addEventListener('click', () => {
+            this.changeDifficulty(3, parseInt(localStorage.getItem('dif') || '0'));
+        });
+        this.evilButton.addEventListener('click', () => {
+            this.changeDifficulty(4, parseInt(localStorage.getItem('dif') || '0'));
+        });
+    }
+
+}
+
 let initialBoard: number[][]; // The initial board state
 let difficulty: number;
 let selectedCell: SelectedCell;
+let chosenDifficulty: RadioButton;
 
 document.addEventListener('DOMContentLoaded', function() {
     difficulty = parseInt(localStorage.getItem('dif') || '0');
-    displayDifficulty();
+    chosenDifficulty = new RadioButton(difficulty);
+    // displayDifficulty();
     initializeBoard();
     
     setClearButton();
