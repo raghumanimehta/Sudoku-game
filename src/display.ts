@@ -6,19 +6,25 @@ import {
     solveBoard
 } from "./solve.js";
 
-// Class that interacts with the selected cell
+// Class that manages interactions with the selected cell in the Sudoku grid
 class SelectedCell {
     private currentCell: HTMLDivElement | null = null;
     
+    // Constructor to reset the selected state of all cells
     SelectedCell() {
         this.resetIsSelected();
     }
 
+    /**
+     * Sets a new cell as the currently selected cell.
+     * @param {HTMLDivElement} newCell - The cell to be set as selected.
+     */
     setCell(newCell: HTMLDivElement) {
         this.resetIsSelected();
         this.currentCell = newCell;
-        this.currentCell.dataset.isSelected = '1'
-        // Set row-col highlighting 
+        this.currentCell.dataset.isSelected = '1';
+        
+        // Highlight the row and column of the selected cell
         for (let row = 0; row < 9; row++) {
             const cell = document.getElementById(`cell-${row}-${newCell.dataset.column}`);
             if (cell === null) return;
@@ -31,6 +37,9 @@ class SelectedCell {
         }
     }
 
+    /**
+     * Toggles the note mode on the selected cell, allowing multiple notes to be added.
+     */
     toggleNoteMode(): void {
         if (this.currentCell == null) return;
         if (this.isNoteModeActivated()) {
@@ -47,12 +56,20 @@ class SelectedCell {
         }
     }
 
+    /**
+     * Checks if the note mode is activated on the selected cell.
+     * @returns {boolean} - True if note mode is activated, otherwise false.
+     */
     isNoteModeActivated(): boolean {
         if (this.currentCell == null) return false;
         return this.currentCell.classList.contains('note-mode');
     }
 
-    setValue(value: string):void {
+    /**
+     * Sets a value in the selected cell. Handles both normal and note mode.
+     * @param {string} value - The value to set in the cell.
+     */
+    setValue(value: string): void {
         if (this.currentCell === null) return;
         if (this.isNoteModeActivated()) {
             this.setNoteValue(value);
@@ -61,7 +78,11 @@ class SelectedCell {
         }
     }
 
-    setNoteValue(value: string):void {
+    /**
+     * Sets a note value in the selected cell.
+     * @param {string} value - The note value to toggle in the cell.
+     */
+    setNoteValue(value: string): void {
         if (this.currentCell === null) return;
         if (this.currentCell.dataset[`note-${value}`] === '0') {
             this.currentCell.dataset[`note-${value}`] = '1';
@@ -70,7 +91,9 @@ class SelectedCell {
         }
     }
 
-
+    /**
+     * Resets the selected and highlighted state of all cells.
+     */
     private resetIsSelected() {
         const cells = document.querySelectorAll('div.cell');
         cells.forEach(cell => {
@@ -80,6 +103,7 @@ class SelectedCell {
     }
 }
 
+// Class to handle difficulty selection via radio buttons
 class RadioButton {
     private easyButton: HTMLInputElement;
     private mediumButton: HTMLInputElement;
@@ -88,19 +112,27 @@ class RadioButton {
     private evilButton: HTMLInputElement;
     public selectedButton: HTMLInputElement;
 
-
+    /**
+     * Constructor to initialize radio buttons and set the default difficulty.
+     * @param {number} currentlySelected - The currently selected difficulty level.
+     */
     constructor(currentlySelected: number) {
-        this.easyButton = document.getElementById('easy-button') as HTMLInputElement;  
-        this.mediumButton = document.getElementById('medium-button') as HTMLInputElement;  
-        this.hardButton = document.getElementById('hard-button') as HTMLInputElement;  
+        this.easyButton = document.getElementById('easy-button') as HTMLInputElement;
+        this.mediumButton = document.getElementById('medium-button') as HTMLInputElement;
+        this.hardButton = document.getElementById('hard-button') as HTMLInputElement;
         this.veryHardButton = document.getElementById('very-hard-button') as HTMLInputElement;
         this.evilButton = document.getElementById('evil-button') as HTMLInputElement;
         this.selectedButton = this.getButtonForDifficulty(currentlySelected);
         this.addEvenetListeners();
         this.selectedButton.checked = true;
         this.selectedButton.dataset.selected = '1';
-    } 
+    }
 
+    /**
+     * Returns the radio button element based on difficulty level.
+     * @param {number} difficulty - The difficulty level.
+     * @returns {HTMLInputElement} - The radio button corresponding to the difficulty.
+     */
     getButtonForDifficulty(difficulty: number): HTMLInputElement {
         switch (difficulty) {
             case 0:
@@ -118,8 +150,11 @@ class RadioButton {
         }
     }
 
+    /**
+     * Changes the difficulty level and updates the Sudoku board.
+     * @param {number} difficulty - The new difficulty level.
+     */
     changeDifficulty(difficulty: number): void {
-
         let previousDif = parseInt(localStorage.getItem('dif') || '0');
         if (difficulty === previousDif && confirm('Do you want to start a new game with the same difficulty?')) {
             localStorage.setItem('dif', difficulty.toString());
@@ -140,6 +175,9 @@ class RadioButton {
         initializeBoard();
     }
 
+    /**
+     * Resets the selected state of all difficulty radio buttons.
+     */
     setAllToZero(): void {
         this.easyButton.dataset.selected = '0';
         this.mediumButton.dataset.selected = '0';
@@ -148,8 +186,9 @@ class RadioButton {
         this.evilButton.dataset.selected = '0';
     }
 
-   
-
+    /**
+     * Adds event listeners to the radio buttons for difficulty changes.
+     */
     addEvenetListeners(): void {
         this.easyButton.addEventListener('click', () => {
             this.changeDifficulty(0);
@@ -157,7 +196,7 @@ class RadioButton {
         this.mediumButton.addEventListener('click', () => {
             this.changeDifficulty(1);
         });
-        this.hardButton.addEventListener('click', () => {  
+        this.hardButton.addEventListener('click', () => {
             this.changeDifficulty(2);
         });
         this.veryHardButton.addEventListener('click', () => {
@@ -167,59 +206,54 @@ class RadioButton {
             this.changeDifficulty(4);
         });
     }
-
 }
 
-let initialBoard: number[][]; // The initial board state
-// let difficulty: number;
+// Initial board state
+let initialBoard: number[][];
 let selectedCell: SelectedCell;
 let chosenDifficulty: RadioButton;
 
 document.addEventListener('DOMContentLoaded', function() {
-    // difficulty = parseInt(localStorage.getItem('dif') || '0');
     chosenDifficulty = new RadioButton(parseInt(localStorage.getItem('dif') || '0'));
-    // displayDifficulty();
     initializeBoard();
-    
     setClearButton();
     setSolveButton();
     setCheckButton();
     setTogleNoteModeButton();
-
     setNumberButtons();
     setDeleteButton();
 });
 
-// Display the board in the default mode
+/**
+ * Initializes and displays the Sudoku board based on the selected difficulty.
+ */
 function initializeBoard() {
     let board: number[][] = generateSudoku(parseInt(localStorage.getItem('dif') || '0'));
     initialBoard = board;
-    console.log(board);
     const container = document.querySelector('#container');
-    if (!container) {
-        return;
-    }
+    if (!container) return;
+
     container.innerHTML = '';
     for (let box = 0; box < 9; box++) {
-        const startRow = (box - box%3);
-        const startCol = (box%3)*3;
-        
+        const startRow = (box - box % 3);
+        const startCol = (box % 3) * 3;
+
         let boxElement = document.createElement('span');
         boxElement.classList.add('box');
 
-        for (let row = startRow; row < startRow+3; row++) {
-            for (let col = startCol; col < startCol+3; col++) {
+        for (let row = startRow; row < startRow + 3; row++) {
+            for (let col = startCol; col < startCol + 3; col++) {
                 let cell: HTMLDivElement;
                 if (board[row][col] === 0) {
                     cell = document.createElement('div');
                     cell.dataset.disabled = '0';
-                    cell.addEventListener('click',()=>{
+                    cell.addEventListener('click', () => {
                         selectedCell.setCell(cell);
-                    })
+                    });
                     for (let i = 1; i <= 9; i++) {
                         cell.dataset[`note-${i}`] = '0';
                     }
-                } else { // fixed values
+                } else {
                     cell = document.createElement('div');
                     cell.innerHTML = board[row][col].toString();
                     cell.dataset.disabled = '1';
@@ -228,7 +262,6 @@ function initializeBoard() {
                 cell.dataset.row = row.toString();
                 cell.className = 'cell';
                 cell.id = `cell-${row}-${col}`;
-
                 boxElement.appendChild(cell);
             }
         }
@@ -239,33 +272,9 @@ function initializeBoard() {
     selectedCell = new SelectedCell();
 }
 
-// // Displays the difficulty level
-// function displayDifficulty() {
-//     const difficultyElement = document.getElementById('difficulty');
-//     if (difficultyElement) {
-//         switch (difficulty) {
-//             case 0:
-//                 difficultyElement.innerText = 'Difficulty: Easy';
-//                 break;
-//             case 1:
-//                 difficultyElement.innerText = 'Difficulty: Medium';
-//                 break;
-//             case 2:
-//                 difficultyElement.innerText = 'Difficulty: Hard';
-//                 break;
-//             case 3:
-//                 difficultyElement.innerText = 'Difficulty: Very Hard';
-//                 break;
-//             case 4:
-//                 difficultyElement.innerText = 'Difficulty: Evil';
-//                 break;
-//             default:
-//                 difficultyElement.innerText = 'Difficulty: Medium';
-//         }
-//     }
-// }
-
-// Add event listeners to number buttons 
+/**
+ * Adds event listeners to number buttons for cell value input.
+ */
 function setNumberButtons(): void {
     const numberButtons = document.getElementsByClassName('numberButtons');
     
@@ -278,7 +287,9 @@ function setNumberButtons(): void {
     }
 }
 
-// add event listener the delete button
+/**
+ * Adds an event listener to the delete button to clear the selected cell's value.
+ */
 function setDeleteButton() {
     const deleteButton = document.querySelector('#delete');
     deleteButton?.addEventListener('click', function() {
@@ -286,7 +297,9 @@ function setDeleteButton() {
     });
 }
 
-// checks if the puzzle is solved or not on click
+/**
+ * Adds an event listener to check if the Sudoku puzzle is solved.
+ */
 function setCheckButton() {
     const checkButton = document.getElementById('checkButton');
     checkButton?.addEventListener('click', function() {
@@ -298,28 +311,33 @@ function setCheckButton() {
     });
 }
 
-// updates the board to original state
+/**
+ * Adds an event listener to the clear button to reset the board to its initial state.
+ */
 function setClearButton() {
-    const checkButton = document.getElementById('clearButton');
-    checkButton?.addEventListener('click', function() {
-        const isConfirmed:boolean = confirm('Do you want to clear your work?');
+    const clearButton = document.getElementById('clearButton');
+    clearButton?.addEventListener('click', function() {
+        const isConfirmed: boolean = confirm('Do you want to clear your work?');
         if (!isConfirmed) return;
         displayBoard(initialBoard);
     });
 }
 
-// Returns the current board state by reading the Dom
+/**
+ * Retrieves the current state of the board by reading the DOM.
+ * @returns {number[][]} - The current state of the board as a 2D array.
+ */
 function getCurrentBoardState(): number[][] {
     const cells = document.querySelectorAll('div.cell');
     const out = getBoardWithZeros();
 
     let currentCellIndex = 0;
     for (let box = 0; box < 9; box++) {
-        const startRow = (box - box%3);
-        const startCol = (box%3)*3;
+        const startRow = (box - box % 3);
+        const startCol = (box % 3) * 3;
 
-        for (let row = startRow; row < startRow+3; row++) {
-            for (let col = startCol; col < startCol+3; col++) {
+        for (let row = startRow; row < startRow + 3; row++) {
+            for (let col = startCol; col < startCol + 3; col++) {
                 const cell = cells[currentCellIndex];
                 let cellValue = parseInt(cell.innerHTML);
                 if (Number.isNaN(cellValue)) {
@@ -334,11 +352,13 @@ function getCurrentBoardState(): number[][] {
     return out;
 }
 
-// solves the board on click
+/**
+ * Adds an event listener to the solve button to solve the puzzle or display the solution.
+ */
 function setSolveButton() {
     const solveButton = document.getElementById('solveButton');
     solveButton?.addEventListener('click', function() {
-        const isConfirmed:boolean = confirm('Do you want to see the solution?');
+        const isConfirmed: boolean = confirm('Do you want to see the solution?');
         if (!isConfirmed) return;
         if (isSolved(getCurrentBoardState())) {
             alert('The puzzle is already solved!');
@@ -348,8 +368,7 @@ function setSolveButton() {
             if (isSolvable) {
                 displayBoard(tempBoard);
             } else {
-                // the user is prompted to overwrite the current progress
-                const isConfirmed = confirm('your progress will be lost, do you want to continue?');
+                const isConfirmed = confirm('Your progress will be lost, do you want to continue?');
                 if (isConfirmed) {
                     const tempBoard = duplicateBoard(initialBoard);
                     solveBoard(tempBoard);
@@ -360,8 +379,10 @@ function setSolveButton() {
     });
 }
 
-
-// Overwrites the HTMLDom board with given board
+/**
+ * Displays the Sudoku board in the DOM, updating it with the given board state.
+ * @param {number[][]} board - The board state to display.
+ */
 function displayBoard(board: number[][]) {
     for (let row: number = 0; row < 9; row++) {
         for (let col: number = 0; col < 9; col++) {
@@ -381,12 +402,13 @@ function displayBoard(board: number[][]) {
     }
 }
 
-// toggles the note mode for sudoku on click
+/**
+ * Adds an event listener to toggle note mode for the selected cell.
+ */
 function setTogleNoteModeButton() {
     const toggleNoteButton = document.getElementById('noteButton');
     toggleNoteButton?.addEventListener('click', function() {
         selectedCell.toggleNoteMode();
     });
 }
-
 
