@@ -246,11 +246,11 @@ button:hover {
 @media (orientation: portrait) {
     body {
         flex-direction: column;
-        padding: 0.5rem;
+        /* padding: 0.5rem; */
     }
 
     #container {
-        width: 85vw;
+        width: 75vw;
         border: 0.2vh solid #000;
     }
 
@@ -268,6 +268,8 @@ button:hover {
     }
 
     .cell {
+        height: 100%;
+        width: 100%;
         font-size: 2vh;
     }
 
@@ -276,10 +278,21 @@ button:hover {
     }
 
     #right-container {
-        width: 50vh;
+        width: 75vw;
+        /* height: 35vh; */
+        aspect-ratio: 5;
         margin-left: 0;
         margin-top: 2vh;
-        padding: 0px 3vw;
+    }
+
+    #right-container button {
+        font-size: 1.5vh;
+        padding: 0.4rem;
+        margin: 0.6vh;
+    }
+
+    #numberButtonsContainer {
+        gap: 0.2vh;
     }
 
     #options-container {
