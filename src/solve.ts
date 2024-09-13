@@ -1,17 +1,21 @@
 // ===== HELPERS ===== 
 
-// Returns a random integer between min and max
+/** Returns a random integer between min and max
+    @param {number} min: minimum value
+    @param {number} max: maximum value
+*/
 function getRandomInt(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-/* gets difficulty of the game
-0: Easy
-  1: Medium
-  2: Hard
-  3: Very Hard
-  4: Evil
+/** gets difficulty of the game
+    0: Easy
+    1: Medium
+    2: Hard
+    3: Very Hard
+    4: Evil
     Default to Medium if the number apart from [0, 4] is passed
+    @param {number} diff: difficulty level
 */
 function getDifficulty(diff: number): number {
     let cellsToRemove: number;
@@ -37,7 +41,12 @@ function getDifficulty(diff: number): number {
     return cellsToRemove;
 }
 
-// Returns true if element=[i,j] is present in the array
+/** Returns true if element=[i,j] is present in the array
+ *  @param {number} i: row index
+ *  @param {number} j: column index
+ *  @param {number[][]} array: 2D array
+ *  @returns {boolean}
+ */
 function hasACopy(i: number, j: number, array: number[][]): boolean {
     for (let elem of array) {
         if ((elem[0] === i) && (elem[1] === j)) {
@@ -47,12 +56,24 @@ function hasACopy(i: number, j: number, array: number[][]): boolean {
     return false 
 }
 
-// Returns true if the num is allowed in the give row and col of given board
+/**  Returns true if the num is allowed in the give row and col of given board
+ *   @param {number[][]} board: 2D array
+ *   @param {number} row: row index
+ *   @param {number} col: column index
+ *   @param {number} num: number to be checked
+ *   @returns {boolean}
+ */
 function isValid(board: number[][], row: number, col: number, num: number): boolean {
     return !inRow(board, row, col, num) && !inCol(board, row, col, num) && !inBox(board, row, col, num);
 }
 
-// Checks if a number is valid in a given row
+/** Checks if a number is valid in a given row
+ *  @param {number[][]} board: 2D array
+ *  @param {number} row: row index 
+ *  @param {number} col: column index
+ *  @param {number} num: number to be checked
+ *  @returns {boolean}
+ */
 function inRow(board: number[][], row: number, col: number, num: number): boolean {
     for (let i = 0; i < 9; i++) {
         if (board[row][i] === num && (i !== col)) {
@@ -62,7 +83,13 @@ function inRow(board: number[][], row: number, col: number, num: number): boolea
     return false;
 }
 
-// Checks if a number is valid in a given column
+/**  Checks if a number is valid in a given column
+ *  @param {number[][]} board: 2D array
+ *  @param {number} row: row index
+ *  @param {number} col: column index
+ *  @param {number} num: number to be checked
+ *  @returns {boolean}
+ */
 function inCol(board: number[][], row: number, col: number, num: number): boolean {
     for (let i = 0; i < 9; i++) {
         if (board[i][col] === num && (i !== row)) {
@@ -72,10 +99,17 @@ function inCol(board: number[][], row: number, col: number, num: number): boolea
     return false;
 }
 
-// Checks if a number is valid in a given box
+/**  Checks if a number is valid in a given box
+ *  @param {number[][]} board: 2D array
+ *  @param {number} row: row index
+ *  @param {number} col: column index
+ *  @param {number} num: number to be checked
+ *  @returns {boolean}
+ */
 function inBox(board: number[][], row: number, col: number, num: number): boolean {
     let start_row = Math.floor(row / 3) * 3;
     let start_col = Math.floor(col / 3) * 3;
+
     for (let i = start_row; i < start_row + 3; i++) {
         for (let j = start_col; j < start_col + 3; j++) {
             if (board[i][j] === num && (row !== i) && (col !== j)) {
@@ -86,7 +120,13 @@ function inBox(board: number[][], row: number, col: number, num: number): boolea
     return false;
 }
 
-// filter the array of numbers if the number is either in the row, column or box
+/** filter the array of numbers if the number is either in the row, column or box
+ *  @param {number[][]} board: 2D array 
+ *  @param {number[]} array: array of numbers 
+ *  @param {number} row: row index
+ *  @param {number} col: column index 
+ *  @returns {number[]}
+ */
 function filterArray(board: number[][], array: number[], row: number, col: number): number[] {
     array = array.filter((elem) => {
         if (inRow(board, row, col, elem) || inCol(board, row, col, elem) || inBox(board, row, col, elem)) {
@@ -97,7 +137,9 @@ function filterArray(board: number[][], array: number[], row: number, col: numbe
     return array;
 }
 
-// Returns a 9x9 board with all zeros
+/** Returns a 9x9 board with all zeros
+ *  @returns {number[][]}
+ */ 
 export function getBoardWithZeros(): number[][] {
     let board: number[][] = []; 
     for (let row = 0; row < 9; row++) {
@@ -109,11 +151,17 @@ export function getBoardWithZeros(): number[][] {
     return board;
 }
 
-// make a deep copy of the array
+/** make a deep copy of the array
+ *  @param {T[]} array: array to be copied
+ * */ 
 function deepCopy<T>(array: T): T {
     return JSON.parse(JSON.stringify(array));
 }
 
+/** Returns a copy of the board
+ *  @param {number[][]} board: 2D array
+ *  @returns {number[][]}
+ */
 export function duplicateBoard(board: number[][]): number[][] {
     let newBoard: number[][] = [];
     for (let row = 0; row < 9; row++) {
@@ -127,7 +175,10 @@ export function duplicateBoard(board: number[][]): number[][] {
 
 // ===== SOVLE ===== 
 
-// Returns true if the incomplete board exactly a single solution
+/** Returns true if the incomplete board exactly a single solution
+ *  @param {number[][]} board: 2D array
+ *  @returns {boolean}
+ * */ 
 function hasUnique(board: number[][]): boolean {
     if (isSolved(board)) return true;
 
@@ -161,7 +212,10 @@ function hasUnique(board: number[][]): boolean {
     return hasUniqueHelper(board) == 1;
 }
 
-// returns true if the board is already solved
+/** returns true if the board is already solved
+ * @param {number[][]} board: 2D array
+ * @returns {boolean}
+ *  */ 
 export function isSolved(board: number[][]): boolean {
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
@@ -178,13 +232,14 @@ export function isSolved(board: number[][]): boolean {
 
 
 
-/*enerate a sudoku puzzle for a given difficulty level. 
-  0: Easy
-  1: Medium
-  2: Hard
-  3: Very Hard
-  4: Evil
-  Default to Medium if the number apart from [0, 4] is passed
+/** generate a sudoku puzzle for a given difficulty level. 
+    0: Easy
+    1: Medium
+    2: Hard
+    3: Very Hard
+    4: Evil
+    Default to Medium if the number apart from [0, 4] is passed
+    @param {number} diff: difficulty level
 */
 export function generateSudoku(diff: number) {
     let board = getCompletelyFilledBoard();
@@ -211,7 +266,10 @@ export function generateSudoku(diff: number) {
     return board;
 }
 
-// Solves the board recursively using backtracking
+/** Solves the board recursively using backtracking
+ *  @param {number[][]} board: 2D array
+ *  @returns {boolean}
+ */ 
 export function solveBoard(board: number[][]): boolean {
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
@@ -232,7 +290,9 @@ export function solveBoard(board: number[][]): boolean {
     return true;
 }
 
-// Returns a filled valid board with random numbers
+/** Returns a filled valid board with random numbers
+ *  @returns {number[][]}
+ */ 
 function getCompletelyFilledBoard(): number[][] {
     let board: number[][] = getBoardWithZeros();
 
