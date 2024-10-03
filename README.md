@@ -1,8 +1,10 @@
-# Sudoku Game
+# [Sudoku Game](https://www.students.cs.ubc.ca/~aghadia/Sudoku/)
 
 ## Overview
 
 This is a **Sudoku web application** where users can solve Sudoku puzzles of varying difficulty levels. The project features note-taking functionality, different difficulty levels, and the ability to check and solve the puzzle. The game is built using HTML, CSS, and TypeScript, with various utility functions for generating, solving, and validating Sudoku boards.
+
+Try out the demo [here](https://www.students.cs.ubc.ca/~aghadia/Sudoku/)
 
 ---
 
